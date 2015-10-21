@@ -16,6 +16,8 @@ struct Hex {
 
 };
 
+
+
 struct FractionalHex {
 
 	float q, r, s;
@@ -66,4 +68,6 @@ namespace hex_math {
 	FractionalHex pixel_to_hex(const Layout& layout, const v2& p);
 
 	Hex hex_round(const FractionalHex& h);
+
+	Hex neighbor(const Hex& hex, int direction);
 }

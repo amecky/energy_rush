@@ -1,5 +1,9 @@
 #include "HexGrid.h"
 
+const Hex DIRECTIONS[] = {
+	Hex(+1, 0), Hex(+1, -1), Hex(0, -1), Hex(-1, 0), Hex(-1, +1), Hex(0, +1)
+};
+
 bool operator == (Hex a, Hex b) {
 	return a.q == b.q && a.r == b.r && a.s == b.s;
 }
@@ -48,5 +52,10 @@ namespace hex_math {
 			s = -q - r;
 		}
 		return Hex(q, r, s);
+	}
+
+	Hex neighbor(const Hex& hex, int direction)  {
+		Hex dir = DIRECTIONS[direction];
+		return Hex(hex.q + dir.q, hex.r + dir.r);
 	}
 }
