@@ -11,7 +11,7 @@ ds::BaseApp *app = new EnergyRush();
 EnergyRush::EnergyRush() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
-	_settings.clearColor = ds::Color(10,10,10,255);	
+	_settings.clearColor = ds::Color(0,0,0,255);	
 	_gameSettings = new GameSettings;
 	_context = new GameContext;
 }
@@ -43,7 +43,7 @@ void EnergyRush::init() {
 	_context->timer.reset();
 	_context->score.goals = 100;
 	_context->score.wrongGoals = 20;
-	stateMachine->activate("GameOver");
+	stateMachine->activate("MainGame");
 }
 
 

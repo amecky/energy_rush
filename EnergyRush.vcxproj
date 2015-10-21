@@ -228,6 +228,7 @@
     <ClCompile Include="src\gamestates\GameOverState.cpp" />
     <ClCompile Include="src\gamestates\MainGameState.cpp" />
     <ClCompile Include="src\EnergyRush.cpp" />
+    <ClCompile Include="src\HexGrid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="src\gamestates\GameOverState.h" />
     <ClInclude Include="src\gamestates\MainGameState.h" />
     <ClInclude Include="src\EnergyRush.h" />
+    <ClInclude Include="src\HexGrid.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="content\dialogs\credits.json" />

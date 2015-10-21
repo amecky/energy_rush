@@ -9,6 +9,7 @@
     <ClCompile Include="src\gamestates\GameOverState.cpp">
       <Filter>gamestates</Filter>
     </ClCompile>
+    <ClCompile Include="src\HexGrid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -22,6 +23,7 @@
       <Filter>gamestates</Filter>
     </ClInclude>
     <ClInclude Include="src\GameContext.h" />
+    <ClInclude Include="src\HexGrid.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EnergyRush.manifest" />
