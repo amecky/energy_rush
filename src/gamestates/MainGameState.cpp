@@ -1,20 +1,12 @@
 #include "MainGameState.h"
 #include <sprites\SpriteBatch.h>
 #include "..\Constants.h"
+#include <Vector.h>
 
-
-MainGameState::MainGameState(GameSettings* settings, GameContext* context) 
-	: ds::GameState("MainGame"), _settings(settings), _context(context), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 100)) {
-	for (int r = 0; r < GRID_HEIGHT; r++) {
-		int q_offset = r >> 1;
-		for (int q = -q_offset; q < GRID_WIDTH - q_offset; q++) {
-			GridItem item;
-			item.hex = Hex(q, r);
-			item.position = hex_math::hex_to_pixel(_layout, item.hex);
-			_items.push_back(item);
-		}
-	}
+MainGameState::MainGameState(GameSettings* settings, GameContext* context) : ds::GameState("MainGame"), _settings(settings), _context(context) {
+	//_grid.resize(GRID_WIDTH, GRID_HEIGHT);
 	_selected = -1;
+	_maxBombs = 60;
 }
 
 
@@ -26,24 +18,134 @@ MainGameState::~MainGameState() {
 // init
 // -------------------------------------------------------
 void MainGameState::init() {
-
+	_hud.init(0, "xscale");
+	ds::assets::load("hud", &_hud, ds::CVT_HUD);
 }
 
+// -------------------------------------------------------
+// fill bombs
+// -------------------------------------------------------
+void MainGameState::fillBombs() {
+	_grid.fill();
+	int total = _width * _height;
+	Hex* temp = new Hex[total];
+	int cnt = 0;
+	for (int r = 0; r < _height; r++) {
+		int q_offset = r >> 1;
+		for (int q = -q_offset; q < _width - q_offset; q++) {
+			temp[cnt++] = Hex(q, r);
+		}
+	}
+	for (int i = 0; i < total; ++i) {
+		int idx = ds::math::random(0, total - 1);
+		Hex t = temp[i];
+		temp[i] = temp[idx];
+		temp[idx] = t;
+	}
+	for (int i = 0; i < _maxBombs; ++i) {
+		_grid.markAsBomb(temp[i]);
+	}
+	Hex n[6];
+	for (int r = 0; r < _height; r++) {
+		int q_offset = r >> 1;
+		for (int q = -q_offset; q < _width - q_offset; q++) {
+			Hex h = Hex(q, r);
+			if (_grid.isValid(h)) {
+				int cnt = _grid.neighbors(h, n);
+				GridItem& current = _grid.get(h);
+				for (int i = 0; i < cnt; ++i) {
+					const GridItem& item = _grid.get(n[i]);
+					if (item.bomb) {
+						++current.adjacentBombs;
+					}
+				}
+			}
+		}
+	}
+	delete[] temp;
+}
 // -------------------------------------------------------
 // activate
 // -------------------------------------------------------
 void MainGameState::activate() {
-	
+	LOG << "game mode: " << _context->mode;
+	const GameMode& mode = GAME_MODES[_context->mode];
+	_grid.resize(mode.width, mode.height);
+	_grid.setOrigin(mode.origin);
+	_width = mode.width;
+	_height = mode.height;
+	_maxBombs = mode.maxBombs;
+	fillBombs();
+	_marked = 0;
+	_markedCorrectly = 0;
+	_hud.setTimer(0, 0, 0);
 }
 
+// -------------------------------------------------------
+// open empty tiles
+// -------------------------------------------------------
+void MainGameState::openEmptyTiles(const Hex& h) {
+	Hex n[6];
+	int cnt = _grid.neighbors(h, n);
+	GridItem& current = _grid.get(h);
+	current.state = 1;
+	for (int i = 0; i < cnt; ++i) {
+		GridItem& item = _grid.get(n[i]);
+		if (item.state == 0 && item.adjacentBombs == 0) {
+			openEmptyTiles(n[i]);
+		}
+		else if (item.state == 0) {
+			item.state = 1;
+		}
+	}
+}
+
+// -------------------------------------------------------
+// on button up
+// -------------------------------------------------------
 int MainGameState::onButtonUp(int button, int x, int y) {
-	v2 mp = ds::renderer::getMousePosition();
-	Hex h = hex_math::hex_round(hex_math::pixel_to_hex(_layout, mp));
-	_selected = -1;
-	LOG << "h: " << h.q << " " << h.r;
-	for (size_t i = 0; i < _items.size(); ++i) {
-		if (_items[i].hex == h) {
-			_selected = i;
+	Hex h = _grid.convertFromMousePos();
+	if (_grid.isValid(h)) {
+		// right button -> mark cell or remove mark
+		if (button == 1) {			
+			GridItem& item = _grid.get(h);
+			if (item.state == 0) {
+				if (_marked < _maxBombs) {
+					item.state = 2;
+					++_marked;
+					if (item.bomb) {
+						++_markedCorrectly;
+					}
+				}
+			}
+			else if (item.state == 2) {
+				if (item.bomb) {
+					--_markedCorrectly;
+				}
+				item.state = 0;
+				--_marked;
+			}
+
+			if (_markedCorrectly == _maxBombs) {
+				LOG << "YOU HAVE WON!!!!!!";
+				return 1;
+			}
+			int left = _maxBombs - _marked;
+			_hud.setCounterValue(0, left);
+			LOG << "marked: " << _marked << " correct: " << _markedCorrectly << " left: " << left;
+		}
+		// left button
+		else {
+			GridItem& item = _grid.get(h);
+			if (item.state == 0) {
+				if (item.bomb) {
+					return 1;
+				}
+				item.state = 1;
+				if (item.adjacentBombs == 0) {
+					openEmptyTiles(h);
+				}
+			}			
 		}
 	}
 	return 0;
@@ -52,7 +154,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 // Update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
-	
+	_hud.update(dt);
 	return 0;
 }
 
@@ -60,14 +162,23 @@ int MainGameState::update(float dt) {
 // render
 // -------------------------------------------------------
 void MainGameState::render() {
-	for (size_t i = 0; i < _items.size(); ++i) {
-		if (i == _selected) {
-			ds::sprites::draw(_items[i].position, ds::math::buildTexture(ds::Rect(400, 42, 40, 44)));
+	for (int i = 0; i < _grid.size(); ++i) {
+		const GridItem& item = _grid.get(i);
+		// marked
+		if (item.state == 2) {
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 120, 40, 44)));
 		}
+		// opened
+		else if (item.state == 1) {
+			int offset = item.adjacentBombs * 40;
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
+		}
+		// closed
 		else {
-			ds::sprites::draw(_items[i].position, ds::math::buildTexture(ds::Rect(400, 0, 40, 44)));
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 40, 40, 44)));
 		}
 	}
+	_hud.render();
 }
 
 // -------------------------------------------------------
@@ -76,6 +187,9 @@ void MainGameState::render() {
 int MainGameState::onChar(int ascii) {	
 	if (ascii == 'e') {
 		return 1;
+	}
+	if (ascii == 'r') {
+		fillBombs();
 	}
 	return 0;
 }

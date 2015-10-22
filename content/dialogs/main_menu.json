@@ -1,19 +1,20 @@
 "dialog" { 
 	"name" : "MainMenu" 
 }
-"image" {
-	"id" : "10" , "pos" : "200,702" , "rect" : "0,420,600,90" 
+"button" { 
+	"id" : "1" , "pos" : "400,600" , "text" : "Easy" , "rect" : "610,0,404,64" 
 }
 "button" { 
-	"id" : "0" , "pos" : "400,520" , "text" : "New Game" , "rect" : "710,0,400,60" 
+	"id" : "2" , "pos" : "400,500" , "text" : "Medium" , "rect" : "610,0,404,64" 
 }
 "button" { 
-	"id" : "1" , "pos" : "400,180" , "text" : "Exit" , "rect" : "640,0,400,60" 
+	"id" : "3" , "pos" : "400,400" , "text" : "Hard" , "rect" : "610,0,404,64" 
 }
 "button" { 
-	"id" : "2" , "pos" : "400,420" , "text" : "Highscores" , "rect" : "710,0,400,60" 
+	"id" : "4" , "pos" : "400,180" , "text" : "Exit" , "rect" : "542,0,404,64" 
 }
 "button" { 
-	"id" : "3" , "pos" : "400,320" , "text" : "Credits" , "rect" : "710,0,400,60" 
+	"id" : "5" , "pos" : "400,300" , "text" : "Highscores" , "rect" : "610,0,404,64" 
 }
+
 

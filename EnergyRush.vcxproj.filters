@@ -10,6 +10,9 @@
       <Filter>gamestates</Filter>
     </ClCompile>
     <ClCompile Include="src\HexGrid.cpp" />
+    <ClCompile Include="src\gamestates\MainMenuState.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -24,6 +27,9 @@
     </ClInclude>
     <ClInclude Include="src\GameContext.h" />
     <ClInclude Include="src\HexGrid.h" />
+    <ClInclude Include="src\gamestates\MainMenuState.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="EnergyRush.manifest" />
@@ -47,6 +53,9 @@
     <None Include="content\dialogs\main_menu.json">
       <Filter>content\dialogs</Filter>
     </None>
+    <None Include="content\resources\hud.json">
+      <Filter>content\resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EnergyRush.rc" />
@@ -57,12 +66,6 @@
     </Filter>
     <Filter Include="content\resources">
       <UniqueIdentifier>{95012cbc-fece-49e2-bad1-9224e063cb52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hud">
-      <UniqueIdentifier>{1dd0d268-f9b3-4a7b-ad23-12c2e45d25a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="particles">
-      <UniqueIdentifier>{f027b9be-07b4-43e4-8500-96041e5e1bd8}</UniqueIdentifier>
     </Filter>
     <Filter Include="gamestates">
       <UniqueIdentifier>{ce1e6b82-5b7d-4f8b-ac80-8c3494d32b4f}</UniqueIdentifier>

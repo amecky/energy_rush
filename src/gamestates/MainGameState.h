@@ -6,16 +6,9 @@
 #include "..\GameContext.h"
 #include "..\HexGrid.h"
 #include <vector>
-
-struct GridItem {
-
-	Hex hex;
-	v2 position;
-};
+#include <objects\HUD.h>
 
 class MainGameState : public ds::GameState {
-
-typedef std::vector<GridItem> Items;
 
 public:
 	MainGameState(GameSettings* settings,GameContext* context);
@@ -27,10 +20,18 @@ public:
 	int onChar(int ascii);
 	int onButtonUp(int button, int x, int y);
 private:
+	void fillBombs();
+	void openEmptyTiles(const Hex& h);
+
+	int _maxBombs;
 	GameSettings* _settings;
 	GameContext* _context;
-	Layout _layout;
-	Items _items;
+	HexGrid _grid;
 	int _selected;
+	int _marked;
+	int _markedCorrectly;
+	ds::HUD _hud;
+	int _width;
+	int _height;
 };
 

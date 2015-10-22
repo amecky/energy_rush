@@ -36,14 +36,8 @@ struct Orientation {
 		start_angle(start_angle_) {}
 };
 
-const Orientation layout_pointy
-= Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
-sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0,
-0.5);
-const Orientation layout_flat
-= Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0),
-2.0 / 3.0, 0.0, -1.0 / 3.0, sqrt(3.0) / 3.0,
-0.0);
+const Orientation layout_pointy = Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0,0.5);
+const Orientation layout_flat = Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0),2.0 / 3.0, 0.0, -1.0 / 3.0, sqrt(3.0) / 3.0,0.0);
 
 struct Layout {
 	Orientation orientation;
@@ -66,4 +60,40 @@ namespace hex_math {
 	FractionalHex pixel_to_hex(const Layout& layout, const v2& p);
 
 	Hex hex_round(const FractionalHex& h);
+
+	Hex neighbor(const Hex& hex, int direction);
 }
+
+struct GridItem {
+
+	Hex hex;
+	v2 position;
+	bool bomb;
+	int adjacentBombs;
+	int state; // 0 = closed / 1 = open / 2 = marked
+};
+
+class HexGrid {
+
+public:
+	HexGrid();
+	~HexGrid();
+	void resize(int qMax, int rMax);
+	void fill();
+	const GridItem& get(int index) const;
+	const GridItem& get(const Hex& hex) const;
+	GridItem& get(const Hex& hex);
+	const int size() const;
+	int select(int x, int y);
+	bool isValid(int q, int r) const;
+	bool isValid(const Hex& hex) const;
+	void markAsBomb(const Hex& hex);
+	int neighbors(const Hex& hex,Hex* ret);
+	Hex convertFromMousePos();
+	void setOrigin(const v2& origin);
+private:
+	int _qMax;
+	int _rMax;
+	GridItem* _items;
+	Layout _layout;
+};
