@@ -228,6 +228,7 @@
     <ClCompile Include="src\gamestates\GameOverState.cpp" />
     <ClCompile Include="src\gamestates\MainGameState.cpp" />
     <ClCompile Include="src\EnergyRush.cpp" />
+    <ClCompile Include="src\gamestates\MainMenuState.cpp" />
     <ClCompile Include="src\HexGrid.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +239,7 @@
     <ClInclude Include="src\gamestates\GameOverState.h" />
     <ClInclude Include="src\gamestates\MainGameState.h" />
     <ClInclude Include="src\EnergyRush.h" />
+    <ClInclude Include="src\gamestates\MainMenuState.h" />
     <ClInclude Include="src\HexGrid.h" />
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +248,7 @@
     <None Include="content\dialogs\highscores.json" />
     <None Include="content\dialogs\main_menu.json" />
     <None Include="content\resources\gui.json" />
+    <None Include="content\resources\hud.json" />
     <None Include="content\resources\xscale.json" />
     <None Include="EnergyRush.manifest" />
     <None Include="README.md" />

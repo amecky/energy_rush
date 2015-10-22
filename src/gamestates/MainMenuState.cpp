@@ -1,21 +1,21 @@
-#include "GameOverState.h"
+#include "MainMenuState.h"
 #include <utils\Log.h>
 #include <sprites\SpriteBatch.h>
 #include <renderer\graphics.h>
 #include <base\GameStateMachine.h>
 
-GameOverState::GameOverState(ds::DialogManager* gui, GameContext* context) : ds::GameState("GameOver"), _context(context), _gui(gui) {
+MainMenuState::MainMenuState(ds::DialogManager* gui, GameContext* context) : ds::GameState("MainMenu"), _context(context), _gui(gui) {
 }
 
 
-GameOverState::~GameOverState() {
+MainMenuState::~MainMenuState() {
 }
 
 // --------------------------------------------
 // activate
 // --------------------------------------------
-void GameOverState::activate() {
-	_gui->activate("GameOver");	
+void MainMenuState::activate() {
+	_gui->activate("MainMenu");	
 	/*
 	ds::GUIDialog* dlg = _gui->get("GameOver");
 	std::string str;
@@ -36,14 +36,14 @@ void GameOverState::activate() {
 // --------------------------------------------
 // activate
 // --------------------------------------------
-void GameOverState::deactivate() {
-	_gui->deactivate("GameOver");
+void MainMenuState::deactivate() {
+	_gui->deactivate("MainMenu");
 }
 
 // --------------------------------------------
 // update
 // --------------------------------------------
-int GameOverState::update(float dt) {
+int MainMenuState::update(float dt) {
 	// nothing to do
 	return 0;
 }
@@ -51,14 +51,26 @@ int GameOverState::update(float dt) {
 // --------------------------------------------
 // click
 // --------------------------------------------
-int GameOverState::onGUIButton(ds::DialogID dlgID, int button) {	
+int MainMenuState::onGUIButton(ds::DialogID dlgID, int button) {
+	if (button == 1) {
+		_context->mode = 0;
+		return 1;
+	}
+	if (button == 2) {
+		_context->mode = 1;
+		return 1;
+	}
+	if (button == 3) {
+		_context->mode = 2;
+		return 1;
+	}
 	return button;
 }
 
 // --------------------------------------------
 // render
 // --------------------------------------------
-void GameOverState::render() {
+void MainMenuState::render() {
 }
 
 

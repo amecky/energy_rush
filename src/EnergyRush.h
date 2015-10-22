@@ -24,6 +24,7 @@ public:
 	void init();
 	void update(float dt);
 	void draw();
+	void onGUIButton(ds::DialogID dlgID, int button);
 private:
 	GameSettings* _gameSettings;
 	GameContext* _context;

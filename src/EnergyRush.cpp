@@ -5,6 +5,7 @@
 #include <base\GameStateMachine.h>
 #include "gamestates\MainGameState.h"
 #include "gamestates\GameOverState.h"
+#include "gamestates\MainMenuState.h"
 
 ds::BaseApp *app = new EnergyRush(); 
 
@@ -25,7 +26,7 @@ EnergyRush::~EnergyRush() {
 // Load content and prepare game
 // -------------------------------------------------------
 bool EnergyRush::loadContent() {	
-	int texture = ds::renderer::loadTexture("textures");
+	int texture = ds::renderer::loadTexture("TextureArray");
 	assert(texture != -1);
 	ds::sprites::initializeTextSystem(texture, "xscale");
 	gui::initialize();
@@ -33,8 +34,11 @@ bool EnergyRush::loadContent() {
 	initializeGUI();
 	stateMachine->add(new MainGameState(_gameSettings,_context));
 	stateMachine->add(new GameOverState(&gui,_context));
+	stateMachine->add(new MainMenuState(&gui, _context));
 	stateMachine->connect("GameOver", 1, "MainGame");
+	stateMachine->connect("GameOver", 2, "MainMenu");
 	stateMachine->connect("MainGame", 1, "GameOver");
+	stateMachine->connect("MainMenu", 1, "MainGame");
 	return true;
 }
 
@@ -43,7 +47,7 @@ void EnergyRush::init() {
 	_context->timer.reset();
 	_context->score.goals = 100;
 	_context->score.wrongGoals = 20;
-	stateMachine->activate("MainGame");
+	stateMachine->activate("MainMenu");
 }
 
 
@@ -145,4 +149,10 @@ void EnergyRush::update(float dt) {
 // -------------------------------------------------------
 void EnergyRush::draw() {
 	
+}
+
+void EnergyRush::onGUIButton(ds::DialogID dlgID, int button) {
+	if (dlgID == 1 && button == 4) {
+		shutdown();
+	}
 }
