@@ -1,16 +1,6 @@
 #pragma once
 #include <utils\GameTimer.h>
 
-struct Score {
-
-	int points;
-	int seconds;
-	int minutes;
-	int goals;
-	int wrongGoals;
-
-};
-
 enum GameModeType {
 	GM_EASY,
 	GM_MEDIUM,
@@ -36,16 +26,15 @@ const GameMode GAME_MODES[] = {
 
 struct GameContext {
 
-	Score score;
-	ds::GameTimer timer;
 	int mode;
+	int marked;
+	int markedCorrectly;
+	int playedSeconds;
+	int playedMinutes;
 
-	void resetScore() {
-		score.points = 0;
-		score.goals = 0;
-		score.wrongGoals = 0;
-		score.seconds = 0;
-		score.minutes = 0;
+	void reset() {
+		marked = 0;
+		markedCorrectly = 0;
 	}
 };
 

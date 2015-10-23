@@ -44,9 +44,7 @@ bool EnergyRush::loadContent() {
 
 void EnergyRush::init() {
 	// for testing
-	_context->timer.reset();
-	_context->score.goals = 100;
-	_context->score.wrongGoals = 20;
+	_context->reset();
 	stateMachine->activate("MainMenu");
 }
 

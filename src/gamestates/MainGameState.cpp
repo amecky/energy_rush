@@ -76,11 +76,16 @@ void MainGameState::activate() {
 	_height = mode.height;
 	_maxBombs = mode.maxBombs;
 	fillBombs();
-	_marked = 0;
-	_markedCorrectly = 0;
+	_context->marked = 0;
+	_context->markedCorrectly = 0;
 	_hud.setTimer(0, 0, 0);
 }
 
+void MainGameState::deactivate() {
+	ds::GameTimer *timer = _hud.getTimer(0);
+	_context->playedSeconds = timer->getSeconds();
+	_context->playedMinutes = timer->getMinutes();
+}
 // -------------------------------------------------------
 // open empty tiles
 // -------------------------------------------------------
@@ -110,29 +115,27 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 		if (button == 1) {			
 			GridItem& item = _grid.get(h);
 			if (item.state == 0) {
-				if (_marked < _maxBombs) {
+				if (_context->marked < _maxBombs) {
 					item.state = 2;
-					++_marked;
+					++_context->marked;
 					if (item.bomb) {
-						++_markedCorrectly;
+						++_context->markedCorrectly;
 					}
 				}
 			}
 			else if (item.state == 2) {
 				if (item.bomb) {
-					--_markedCorrectly;
+					--_context->markedCorrectly;
 				}
 				item.state = 0;
-				--_marked;
+				--_context->marked;
 			}
 
-			if (_markedCorrectly == _maxBombs) {
-				LOG << "YOU HAVE WON!!!!!!";
+			if (_context->markedCorrectly == _maxBombs) {
 				return 1;
 			}
-			int left = _maxBombs - _marked;
+			int left = _maxBombs - _context->marked;
 			_hud.setCounterValue(0, left);
-			LOG << "marked: " << _marked << " correct: " << _markedCorrectly << " left: " << left;
 		}
 		// left button
 		else {

@@ -17,6 +17,7 @@ public:
 	int update(float dt);
 	void render();
 	void activate();
+	void deactivate();
 	int onChar(int ascii);
 	int onButtonUp(int button, int x, int y);
 private:
@@ -28,8 +29,6 @@ private:
 	GameContext* _context;
 	HexGrid _grid;
 	int _selected;
-	int _marked;
-	int _markedCorrectly;
 	ds::HUD _hud;
 	int _width;
 	int _height;

@@ -16,21 +16,20 @@ GameOverState::~GameOverState() {
 // --------------------------------------------
 void GameOverState::activate() {
 	_gui->activate("GameOver");	
-	/*
+	
 	ds::GUIDialog* dlg = _gui->get("GameOver");
 	std::string str;
-	ds::string::formatInt(_context->score.goals, str);
+	ds::string::formatInt(_context->markedCorrectly, str);
 	dlg->updateText(12, str);
-	ds::string::formatInt(_context->score.wrongGoals, str);
-	dlg->updateText(8, str);
-	ds::string::formatTime(_context->timer.getMinutes(), _context->timer.getSeconds(), str);
-	int seconds = _context->timer.getSeconds() + _context->timer.getMinutes() * 60;
-	int diff = seconds - 100;
+	ds::string::formatTime(_context->playedMinutes, _context->playedSeconds, str);
 	dlg->updateText(14, str);
-	_context->score.points = _context->score.goals * 1000 + diff * 500;
-	ds::string::formatInt(_context->score.points, str);
-	dlg->updateText(16, str);
-	*/
+
+	if (_context->markedCorrectly == GAME_MODES[_context->mode].maxBombs) {
+		dlg->updateImage(11, 140, 660, ds::Rect(680, 0, 470, 84));
+	}
+	else {
+		dlg->updateImage(11, 140, 660, ds::Rect(680, 470, 450, 84));
+	}
 }
 
 // --------------------------------------------
