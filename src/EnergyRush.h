@@ -8,7 +8,6 @@
 #include "base\BaseApp.h"
 #include "dxstdafx.h"
 #include <renderer\render_types.h>
-#include "GameSettings.h"
 #include "GameContext.h"
 
 class EnergyRush : public ds::BaseApp {
@@ -26,6 +25,5 @@ public:
 	void draw();
 	void onGUIButton(ds::DialogID dlgID, int button);
 private:
-	GameSettings* _gameSettings;
 	GameContext* _context;
 };

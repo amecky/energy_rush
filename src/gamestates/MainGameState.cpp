@@ -3,8 +3,7 @@
 #include "..\Constants.h"
 #include <Vector.h>
 
-MainGameState::MainGameState(GameSettings* settings, GameContext* context) : ds::GameState("MainGame"), _settings(settings), _context(context) {
-	//_grid.resize(GRID_WIDTH, GRID_HEIGHT);
+MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), _context(context) {
 	_selected = -1;
 	_maxBombs = 60;
 }
@@ -27,6 +26,7 @@ void MainGameState::init() {
 // -------------------------------------------------------
 void MainGameState::fillBombs() {
 	_grid.fill();
+	/*
 	int total = _width * _height;
 	Hex* temp = new Hex[total];
 	int cnt = 0;
@@ -63,6 +63,7 @@ void MainGameState::fillBombs() {
 		}
 	}
 	delete[] temp;
+	*/
 }
 // -------------------------------------------------------
 // activate
@@ -168,18 +169,19 @@ void MainGameState::render() {
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
 		// marked
-		if (item.state == 2) {
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 120, 40, 44)));
-		}
+		//if (item.state == 2) {
+			//ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 120, 40, 44)));
+		//}
 		// opened
-		else if (item.state == 1) {
-			int offset = item.adjacentBombs * 40;
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
-		}
+		//else if (item.state == 1) {
+			//int offset = item.adjacentBombs * 40;
+			//ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
+		//}
 		// closed
-		else {
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 40, 40, 44)));
-		}
+		//else {
+		int offset = item.color * 40;
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
+		//}
 	}
 	_hud.render();
 }

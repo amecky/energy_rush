@@ -2,7 +2,6 @@
 #include <base\GameState.h>
 #include <renderer\render_types.h>
 #include <ui\IMGUI.h>
-#include "..\GameSettings.h"
 #include "..\GameContext.h"
 #include "..\HexGrid.h"
 #include <vector>
@@ -11,7 +10,7 @@
 class MainGameState : public ds::GameState {
 
 public:
-	MainGameState(GameSettings* settings,GameContext* context);
+	MainGameState(GameContext* context);
 	virtual ~MainGameState();
 	void init();
 	int update(float dt);
@@ -25,7 +24,6 @@ private:
 	void openEmptyTiles(const Hex& h);
 
 	int _maxBombs;
-	GameSettings* _settings;
 	GameContext* _context;
 	HexGrid _grid;
 	int _selected;
