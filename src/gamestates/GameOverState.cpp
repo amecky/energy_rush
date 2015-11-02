@@ -19,12 +19,6 @@ void GameOverState::activate() {
 	
 	ds::GUIDialog* dlg = _gui->get("GameOver");
 	std::string str;
-	ds::string::formatInt(_context->markedCorrectly, str);
-	dlg->updateText(12, str);
-	ds::string::formatTime(_context->playedMinutes, _context->playedSeconds, str);
-	dlg->updateText(14, str);
-
-
 }
 
 // --------------------------------------------

@@ -1,7 +1,13 @@
 "counter" {
 	"id" : "0" ,
-	"length" : "2" ,
+	"length" : "3" ,
 	"position" : "120,700" ,
+	"color" : "255,255,255,255"
+}
+"counter" {
+	"id" : "1" ,
+	"length" : "2" ,
+	"position" : "520,700" ,
 	"color" : "255,255,255,255"
 }
 "timer" {

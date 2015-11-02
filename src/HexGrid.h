@@ -15,7 +15,7 @@ struct GridItem {
 	Hex hex;
 	v2 position;
 	v2 scale;
-	bool bomb;
+	int bombCounter;
 	int color;
 	ItemState state;
 	float timer;
@@ -28,6 +28,7 @@ public:
 	~HexGrid();
 	void resize(int qMax, int rMax);
 	void fill();
+	void fillBombs(int max);
 	const GridItem& get(int index) const;
 	GridItem& get(int index);
 	const GridItem& get(const Hex& hex) const;
@@ -45,7 +46,8 @@ public:
 	void pickRandomColor(const Hex& h);
 	void update(float dt);
 	void findConnectedItems(const Hex& h, std::vector<Hex>& list);
-	void refill(const std::vector<Hex>& list);
+	int refill(const std::vector<Hex>& list);
+	bool decrementBombs();
 private:
 	int _qMax;
 	int _rMax;

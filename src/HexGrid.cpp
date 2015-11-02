@@ -36,7 +36,7 @@ void HexGrid::fill() {
 			GridItem item;
 			item.hex = Hex(q, r);
 			item.position = hex_math::hex_to_pixel(_layout, item.hex);
-			item.bomb = false;
+			item.bombCounter = 0;
 			item.color = ds::math::random(0, 4);
 			item.state = IS_GROW;
 			item.timer = 0.0f;
@@ -47,18 +47,52 @@ void HexGrid::fill() {
 	_hover = -1;
 }
 
+// -------------------------------------------------------
+// fill bombs
+// -------------------------------------------------------
+void HexGrid::fillBombs(int max) {
+	int total = _qMax * _rMax;
+	Hex* temp = new Hex[total];
+	int cnt = 0;
+	for (int r = 0; r < _rMax; r++) {
+		int q_offset = r >> 1;
+		for (int q = -q_offset; q < _qMax - q_offset; q++) {
+			temp[cnt++] = Hex(q, r);
+		}
+	}
+	for (int i = 0; i < total; ++i) {
+		int idx = ds::math::random(0, total - 1);
+		Hex t = temp[i];
+		temp[i] = temp[idx];
+		temp[idx] = t;
+	}
+	for (int i = 0; i < max; ++i) {
+		markAsBomb(temp[i]);
+	}
+	delete[] temp;
+}
+
+// -------------------------------------------------------
+// get
+// -------------------------------------------------------
 const GridItem& HexGrid::get(const Hex& hex) const {
 	int q_offset = hex.r >> 1;
 	int idx = (hex.q + q_offset) + hex.r * _qMax;
 	return _items[idx];
 }
 
+// -------------------------------------------------------
+// get by hex
+// -------------------------------------------------------
 GridItem& HexGrid::get(const Hex& hex) {
 	int q_offset = hex.r >> 1;
 	int idx = (hex.q + q_offset) + hex.r * _qMax;
 	return _items[idx];
 }
 
+// -------------------------------------------------------
+// neighbors
+// -------------------------------------------------------
 int HexGrid::neighbors(const Hex& hex, Hex* ret) {
 	int cnt = 0;
 	for (int i = 0; i < 6; ++i) {
@@ -70,17 +104,23 @@ int HexGrid::neighbors(const Hex& hex, Hex* ret) {
 	return cnt;
 }
 
+// -------------------------------------------------------
+// convert from mouse pos
+// -------------------------------------------------------
 Hex HexGrid::convertFromMousePos() {
 	v2 mp = ds::renderer::getMousePosition();
 	return hex_math::hex_round(hex_math::pixel_to_hex(_layout, mp));
 }
 // -------------------------------------------------------
-// get
+// get by index
 // -------------------------------------------------------
 const GridItem& HexGrid::get(int index) const {
 	return _items[index];
 }
 
+// -------------------------------------------------------
+// get by index
+// -------------------------------------------------------
 GridItem& HexGrid::get(int index) {
 	return _items[index];
 }
@@ -100,7 +140,6 @@ int HexGrid::select(int x, int y) {
 	Hex h = hex_math::hex_round(hex_math::pixel_to_hex(_layout, mp));
 	int q_offset = h.r >> 1;
 	int selected = -1;
-	//LOG << "h: " << h.q << " " << h.r << " q_offset: " << q_offset;
 	if (!isValid(h)) {
 		return -1;
 	}
@@ -134,33 +173,67 @@ bool HexGrid::isValid(const Hex& hex) const {
 	return isValid(hex.q, hex.r);
 }
 
+// -------------------------------------------------------
+// mark as bomb
+// -------------------------------------------------------
 void HexGrid::markAsBomb(const Hex& hex) {
 	int q_offset = hex.r >> 1;
 	int idx = (hex.q + q_offset) + hex.r * _qMax;
-	_items[idx].bomb = true;
+	_items[idx].bombCounter = 10;
 }
 
+// -------------------------------------------------------
+// pick a random color
+// -------------------------------------------------------
 void HexGrid::pickRandomColor(const Hex& hex) {
 	int q_offset = hex.r >> 1;
 	int idx = (hex.q + q_offset) + hex.r * _qMax;
 	_items[idx].color = ds::math::random(0, 4);
 }
 
+// -------------------------------------------------------
+// set origin
+// -------------------------------------------------------
 void HexGrid::setOrigin(const v2& origin) {
 	_layout.origin = origin;
 }
 
+// -------------------------------------------------------
+// get index
+// -------------------------------------------------------
 int HexGrid::getIndex(const Hex& hex) const {
 	int q_offset = hex.r >> 1;
 	return (hex.q + q_offset) + hex.r * _qMax;
 }
 
+// -------------------------------------------------------
+// swap colors
+// -------------------------------------------------------
 void HexGrid::swap(int firstIndex, int secondIndex) {
 	GridItem first = _items[firstIndex];
 	_items[firstIndex].color = _items[secondIndex].color;
 	_items[secondIndex].color = first.color;
 }
 
+// -------------------------------------------------------
+// decrement all bomb counters
+// -------------------------------------------------------
+bool HexGrid::decrementBombs() {
+	for (int i = 0; i < size(); ++i) {
+		GridItem& item = get(i);
+		if (item.bombCounter > 0) {
+			--item.bombCounter;
+			if (item.bombCounter <= 0) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// -------------------------------------------------------
+// update
+// -------------------------------------------------------
 void HexGrid::update(float dt) {
 	// scaling based on item state
 	for (int i = 0; i < size(); ++i) {
@@ -211,6 +284,9 @@ void HexGrid::update(float dt) {
 	}
 }
 
+// -------------------------------------------------------
+// find connected items
+// -------------------------------------------------------
 void HexGrid::findConnectedItems(const Hex& h, std::vector<Hex>& list) {
 	if (isValid(h)) {
 		Hex n[6];
@@ -234,10 +310,19 @@ void HexGrid::findConnectedItems(const Hex& h, std::vector<Hex>& list) {
 	}
 }
 
-void HexGrid::refill(const std::vector<Hex>& list) {
+// -------------------------------------------------------
+// refill
+// -------------------------------------------------------
+int HexGrid::refill(const std::vector<Hex>& list) {
+	int ret = 0;
 	for (size_t i = 0; i < list.size(); ++i) {
 		GridItem& item = get(list[i]);
+		if (item.bombCounter > 0) {
+			item.bombCounter = 0;
+			++ret;
+		}
 		item.state = IS_SHRINK;
 		item.timer = 0.0f;
 	}
+	return ret;
 }

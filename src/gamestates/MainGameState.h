@@ -21,8 +21,10 @@ public:
 	int onButtonUp(int button, int x, int y);
 private:
 	void fillBombs();
+	void nextLevel();
 
 	int _maxBombs;
+	int _killed;
 	GameContext* _context;
 	HexGrid _grid;
 	int _selected;
@@ -30,5 +32,6 @@ private:
 	ds::HUD _hud;
 	int _width;
 	int _height;
+
 };
 
