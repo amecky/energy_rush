@@ -21,12 +21,12 @@ public:
 	int onButtonUp(int button, int x, int y);
 private:
 	void fillBombs();
-	void openEmptyTiles(const Hex& h);
 
 	int _maxBombs;
 	GameContext* _context;
 	HexGrid _grid;
 	int _selected;
+	int _hover;
 	ds::HUD _hud;
 	int _width;
 	int _height;

@@ -1,8 +1,9 @@
 #include "HexGrid.h"
 #include <assert.h>
 #include <renderer\graphics.h>
+#include <math\tweening.h>
 
-HexGrid::HexGrid() : _qMax(0), _rMax(0), _items(0), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 130)) {
+HexGrid::HexGrid() : _qMax(0), _rMax(0), _items(0), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 130)) , _hover(-1) {
 }
 
 HexGrid::~HexGrid() {
@@ -35,14 +36,15 @@ void HexGrid::fill() {
 			GridItem item;
 			item.hex = Hex(q, r);
 			item.position = hex_math::hex_to_pixel(_layout, item.hex);
-			item.state = 0;
 			item.bomb = false;
-			item.adjacentBombs = 0;
 			item.color = ds::math::random(0, 4);
+			item.state = IS_GROW;
+			item.timer = 0.0f;
 			int idx = (q + q_offset) + r * _qMax;
 			_items[idx] = item;
 		}
 	}
+	_hover = -1;
 }
 
 const GridItem& HexGrid::get(const Hex& hex) const {
@@ -76,6 +78,10 @@ Hex HexGrid::convertFromMousePos() {
 // get
 // -------------------------------------------------------
 const GridItem& HexGrid::get(int index) const {
+	return _items[index];
+}
+
+GridItem& HexGrid::get(int index) {
 	return _items[index];
 }
 
@@ -134,6 +140,104 @@ void HexGrid::markAsBomb(const Hex& hex) {
 	_items[idx].bomb = true;
 }
 
+void HexGrid::pickRandomColor(const Hex& hex) {
+	int q_offset = hex.r >> 1;
+	int idx = (hex.q + q_offset) + hex.r * _qMax;
+	_items[idx].color = ds::math::random(0, 4);
+}
+
 void HexGrid::setOrigin(const v2& origin) {
 	_layout.origin = origin;
+}
+
+int HexGrid::getIndex(const Hex& hex) const {
+	int q_offset = hex.r >> 1;
+	return (hex.q + q_offset) + hex.r * _qMax;
+}
+
+void HexGrid::swap(int firstIndex, int secondIndex) {
+	GridItem first = _items[firstIndex];
+	_items[firstIndex].color = _items[secondIndex].color;
+	_items[secondIndex].color = first.color;
+}
+
+void HexGrid::update(float dt) {
+	// scaling based on item state
+	for (int i = 0; i < size(); ++i) {
+		GridItem& item = get(i);
+		if (item.state == IS_GROW) {
+			item.timer += dt;
+			float norm = item.timer / 0.4f;
+			item.scale = tweening::interpolate(tweening::easeInQuad, v2(0.1f, 0.1f), v2(1.0f, 1.0f), norm);
+			if (norm >= 1.0f) {
+				item.state = IS_NORMAL;
+				item.scale = v2(1, 1);
+			}
+		}
+		else if (item.state == IS_SHRINK) {
+			item.timer += dt;
+			float norm = item.timer / 0.4f;
+			item.scale = tweening::interpolate(tweening::easeInQuad, v2(1.0f, 1.0f), v2(0.05f, 0.05f), norm);
+			if (norm >= 1.0f) {
+				item.state = IS_GROW;
+				item.timer = 0.0f;
+				item.color = ds::math::random(0, 4);
+			}
+		}
+		if (item.state == IS_WIGGLE) {
+			item.timer += dt;
+			float norm = item.timer / 0.4f;
+			item.scale.x = 0.8f + sin(item.timer * 5.0f) * 0.2f;
+			item.scale.y = 0.8f + sin(item.timer * 5.0f) * 0.2f;
+			if (norm >= 1.0f) {
+				item.state = IS_NORMAL;
+				item.scale = v2(1, 1);
+			}
+		}
+	}
+
+	// hover
+	Hex h = convertFromMousePos();
+	if (isValid(h)) {
+		int current = getIndex(h);
+		if (current != _hover) {
+			_hover = current;
+			GridItem& item = get(h);
+			if (item.state == IS_NORMAL) {
+				item.state = IS_WIGGLE;
+				item.timer = 0.0f;
+			}
+		}
+	}
+}
+
+void HexGrid::findConnectedItems(const Hex& h, std::vector<Hex>& list) {
+	if (isValid(h)) {
+		Hex n[6];
+		int cnt = neighbors(h, n);
+		GridItem& current = get(h);
+		for (int i = 0; i < cnt; ++i) {
+			GridItem& item = get(n[i]);
+			if (current.color == item.color) {
+				bool found = false;
+				for (size_t j = 0; j < list.size(); ++j) {
+					if (list[j] == n[i]) {
+						found = true;
+					}
+				}
+				if (!found) {
+					list.push_back(n[i]);
+					findConnectedItems(n[i], list);
+				}
+			}
+		}
+	}
+}
+
+void HexGrid::refill(const std::vector<Hex>& list) {
+	for (size_t i = 0; i < list.size(); ++i) {
+		GridItem& item = get(list[i]);
+		item.state = IS_SHRINK;
+		item.timer = 0.0f;
+	}
 }

@@ -24,12 +24,7 @@ void GameOverState::activate() {
 	ds::string::formatTime(_context->playedMinutes, _context->playedSeconds, str);
 	dlg->updateText(14, str);
 
-	if (_context->markedCorrectly == GAME_MODES[_context->mode].maxBombs) {
-		dlg->updateImage(11, 140, 660, ds::Rect(680, 0, 470, 84));
-	}
-	else {
-		dlg->updateImage(11, 140, 660, ds::Rect(680, 470, 450, 84));
-	}
+
 }
 
 // --------------------------------------------

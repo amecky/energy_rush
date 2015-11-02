@@ -69,41 +69,22 @@ void MainGameState::fillBombs() {
 // activate
 // -------------------------------------------------------
 void MainGameState::activate() {
-	LOG << "game mode: " << _context->mode;
-	const GameMode& mode = GAME_MODES[_context->mode];
-	_grid.resize(mode.width, mode.height);
-	_grid.setOrigin(mode.origin);
-	_width = mode.width;
-	_height = mode.height;
-	_maxBombs = mode.maxBombs;
+	_grid.resize(20,15);
+	_grid.setOrigin(v2(100,100));
+	_width = 20;
+	_height = 15;
+	_selected = -1;
 	fillBombs();
 	_context->marked = 0;
 	_context->markedCorrectly = 0;
 	_hud.setTimer(0, 0, 0);
+	_hover = -1;
 }
 
 void MainGameState::deactivate() {
 	ds::GameTimer *timer = _hud.getTimer(0);
 	_context->playedSeconds = timer->getSeconds();
 	_context->playedMinutes = timer->getMinutes();
-}
-// -------------------------------------------------------
-// open empty tiles
-// -------------------------------------------------------
-void MainGameState::openEmptyTiles(const Hex& h) {
-	Hex n[6];
-	int cnt = _grid.neighbors(h, n);
-	GridItem& current = _grid.get(h);
-	current.state = 1;
-	for (int i = 0; i < cnt; ++i) {
-		GridItem& item = _grid.get(n[i]);
-		if (item.state == 0 && item.adjacentBombs == 0) {
-			openEmptyTiles(n[i]);
-		}
-		else if (item.state == 0) {
-			item.state = 1;
-		}
-	}
 }
 
 // -------------------------------------------------------
@@ -112,44 +93,27 @@ void MainGameState::openEmptyTiles(const Hex& h) {
 int MainGameState::onButtonUp(int button, int x, int y) {
 	Hex h = _grid.convertFromMousePos();
 	if (_grid.isValid(h)) {
-		// right button -> mark cell or remove mark
-		if (button == 1) {			
-			GridItem& item = _grid.get(h);
-			if (item.state == 0) {
-				if (_context->marked < _maxBombs) {
-					item.state = 2;
-					++_context->marked;
-					if (item.bomb) {
-						++_context->markedCorrectly;
-					}
-				}
+		int r = _grid.select(x, y);
+		if (_selected != r) {
+			if (_selected == -1) {
+				_selected = r;
 			}
-			else if (item.state == 2) {
-				if (item.bomb) {
-					--_context->markedCorrectly;
-				}
-				item.state = 0;
-				--_context->marked;
+			else {
+				// swap elements
+				_grid.swap(_selected, r);
+				std::vector<Hex> list;				
+				_grid.findConnectedItems(h, list);
+				LOG << "1: connected: " << list.size();
+				GridItem& selItem = _grid.get(_selected);
+				_grid.findConnectedItems(selItem.hex, list);
+				LOG << "2: connected: " << list.size();				
+				_selected = -1;
+				_grid.refill(list);
+				
 			}
-
-			if (_context->markedCorrectly == _maxBombs) {
-				return 1;
-			}
-			int left = _maxBombs - _context->marked;
-			_hud.setCounterValue(0, left);
 		}
-		// left button
 		else {
-			GridItem& item = _grid.get(h);
-			if (item.state == 0) {
-				if (item.bomb) {
-					return 1;
-				}
-				item.state = 1;
-				if (item.adjacentBombs == 0) {
-					openEmptyTiles(h);
-				}
-			}			
+			_selected = -1;
 		}
 	}
 	return 0;
@@ -158,6 +122,9 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 // Update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
+
+	_grid.update(dt);
+
 	_hud.update(dt);
 	return 0;
 }
@@ -168,20 +135,12 @@ int MainGameState::update(float dt) {
 void MainGameState::render() {
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
-		// marked
-		//if (item.state == 2) {
-			//ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, 120, 40, 44)));
-		//}
-		// opened
-		//else if (item.state == 1) {
-			//int offset = item.adjacentBombs * 40;
-			//ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
-		//}
-		// closed
-		//else {
 		int offset = item.color * 40;
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)));
-		//}
+		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)), 0.0f, item.scale.x, item.scale.y);		
+	}
+	if ( _selected != -1) {
+		const GridItem& item = _grid.get(_selected);
+		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, 210, 56, 60)));
 	}
 	_hud.render();
 }
@@ -198,3 +157,4 @@ int MainGameState::onChar(int ascii) {
 	}
 	return 0;
 }
+

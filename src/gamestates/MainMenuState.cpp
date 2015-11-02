@@ -52,18 +52,6 @@ int MainMenuState::update(float dt) {
 // click
 // --------------------------------------------
 int MainMenuState::onGUIButton(ds::DialogID dlgID, int button) {
-	if (button == 1) {
-		_context->mode = 0;
-		return 1;
-	}
-	if (button == 2) {
-		_context->mode = 1;
-		return 1;
-	}
-	if (button == 3) {
-		_context->mode = 2;
-		return 1;
-	}
 	return button;
 }
 

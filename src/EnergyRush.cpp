@@ -42,7 +42,7 @@ bool EnergyRush::loadContent() {
 void EnergyRush::init() {
 	// for testing
 	_context->reset();
-	stateMachine->activate("MainMenu");
+	stateMachine->activate("MainGame");
 }
 
 
