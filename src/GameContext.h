@@ -1,5 +1,5 @@
 #pragma once
-#include <utils\GameTimer.h>
+#include <dialogs\GUIDialog.h>
 
 struct GameContext {
 
@@ -7,6 +7,7 @@ struct GameContext {
 	int points;
 	int level;
 	int kills;
+	ds::GUIDialog* hudDialog;
 
 	void reset() {
 		collected = 0;

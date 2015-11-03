@@ -5,7 +5,6 @@
 #include "..\GameContext.h"
 #include "..\HexGrid.h"
 #include <vector>
-#include <objects\HUD.h>
 
 class MainGameState : public ds::GameState {
 
@@ -29,9 +28,9 @@ private:
 	HexGrid _grid;
 	int _selected;
 	int _hover;
-	ds::HUD _hud;
 	int _width;
 	int _height;
+	
 
 };
 

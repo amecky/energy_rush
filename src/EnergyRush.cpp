@@ -13,6 +13,7 @@ EnergyRush::EnergyRush() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0,0,0,255);	
+	_settings.showEditor = true;
 	_context = new GameContext;
 }
 
@@ -29,6 +30,7 @@ bool EnergyRush::loadContent() {
 	ds::sprites::initializeTextSystem(texture, "xscale");
 	gui::initialize();
 	initializeGUI();
+	_context->hudDialog = gui.get("HUD");
 	stateMachine->add(new MainGameState(_context));
 	stateMachine->add(new GameOverState(&gui,_context));
 	stateMachine->add(new MainMenuState(&gui, _context));

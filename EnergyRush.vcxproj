@@ -224,7 +224,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameSettings.cpp" />
     <ClCompile Include="src\gamestates\GameOverState.cpp" />
     <ClCompile Include="src\gamestates\MainGameState.cpp" />
     <ClCompile Include="src\EnergyRush.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\GameContext.h" />
-    <ClInclude Include="src\GameSettings.h" />
     <ClInclude Include="src\gamestates\GameOverState.h" />
     <ClInclude Include="src\gamestates\MainGameState.h" />
     <ClInclude Include="src\EnergyRush.h" />

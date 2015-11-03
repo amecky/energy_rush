@@ -7,7 +7,13 @@
 "counter" {
 	"id" : "1" ,
 	"length" : "2" ,
-	"position" : "520,700" ,
+	"position" : "420,700" ,
+	"color" : "255,255,255,255"
+}
+"counter" {
+	"id" : "2" ,
+	"length" : "2" ,
+	"position" : "620,700" ,
 	"color" : "255,255,255,255"
 }
 "timer" {

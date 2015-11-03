@@ -19,8 +19,8 @@ MainGameState::~MainGameState() {
 // init
 // -------------------------------------------------------
 void MainGameState::init() {
-	_hud.init(0, "xscale");
-	ds::assets::load("hud", &_hud, ds::CVT_HUD);
+	//_hud.init(0, "xscale");
+	//ds::assets::load("hud", &_hud, ds::CVT_HUD);
 }
 
 // -------------------------------------------------------
@@ -36,6 +36,8 @@ void MainGameState::fillBombs() {
 // -------------------------------------------------------
 void MainGameState::activate() {
 	
+	_context->hudDialog->activate();
+
 	_maxBombs = 2;
 	_width = 20;
 	_height = 15;
@@ -44,7 +46,12 @@ void MainGameState::activate() {
 	_context->collected = 0;
 	_context->points = 0;
 	_context->level = 0;
-	_hud.setTimer(0, 0, 0);
+	//_context->hud->setTimer(0, 0, 0);
+
+	_context->hudDialog->setNumber(HUD_COLLECTED, 0);
+	_context->hudDialog->setNumber(HUD_BOMBS, 0);
+	_context->hudDialog->setNumber(HUD_LEVEL, 0);
+
 	nextLevel();
 	
 }
@@ -59,15 +66,15 @@ void MainGameState::nextLevel() {
 	_context->kills = 0;
 	_maxBombs = _context->level * 2;
 	fillBombs();
-	_hud.setCounterValue(1, _maxBombs);
-	_hud.setCounterValue(0, 0);
+	_context->hudDialog->setNumber(HUD_LEVEL, _context->level);
+	_context->hudDialog->setNumber(HUD_BOMBS, _maxBombs);
 	_grid.decrementBombs();
 }
 // -------------------------------------------------------
 // dactivate
 // -------------------------------------------------------
 void MainGameState::deactivate() {
-	ds::GameTimer *timer = _hud.getTimer(0);
+	_context->hudDialog->deactivate();
 }
 
 // -------------------------------------------------------
@@ -110,10 +117,10 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 						nextLevel();
 						dec = false;
 					}
-					_hud.setCounterValue(1, d);
+					_context->hudDialog->setNumber(HUD_BOMBS, d);
 					// set points
 					_context->collected += list.size();
-					_hud.setCounterValue(0, _context->collected);
+					_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
 				}
 				else {
 					// swap back - no legal move
@@ -122,7 +129,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 				if (dec) {
 					if (_grid.decrementBombs()) {
 						LOG << "GAME OVER!!!";
-						// FIXME: game over
+						return 1;
 					}
 				}
 
@@ -141,7 +148,7 @@ int MainGameState::update(float dt) {
 
 	_grid.update(dt);
 
-	_hud.update(dt);
+	//_context->hud->update(dt);
 
 	return 0;
 }
@@ -163,7 +170,6 @@ void MainGameState::render() {
 		const GridItem& item = _grid.get(_selected);
 		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, 210, 56, 60)));
 	}
-	_hud.render();
 }
 
 // -------------------------------------------------------
