@@ -1,29 +1,22 @@
 "text" { 
     "id" : "0" , 
-    "pos" : "360,700" , 
+    "pos" : "510,700" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
     "scale" : "1.00" , 
-    "label" : "Bombs:"    
+    "text" : "Bombs:"    
 }
 "text" { 
     "id" : "1" , 
-    "pos" : "100,700" , 
+    "pos" : "140,700" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
     "scale" : "1.00" , 
-    "label" : "Collected:"    
-}
-"timer" { 
-    "id" : "2" , 
-    "pos" : "880,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00"    
+    "text" : "Collected:"    
 }
 "numbers" { 
     "id" : "3" , 
-    "pos" : "240,700" , 
+    "pos" : "290,700" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
     "scale" : "1.00" , 
@@ -32,16 +25,16 @@
 }
 "numbers" { 
     "id" : "4" , 
-    "pos" : "460,700" , 
+    "pos" : "620,700" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
     "scale" : "1.00" , 
     "value" : "0" , 
-    "length" : "3"    
+    "length" : "2"    
 }
 "numbers" { 
     "id" : "5" , 
-    "pos" : "670,700" , 
+    "pos" : "920,700" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
     "scale" : "1.00" , 
@@ -50,17 +43,9 @@
 }
 "text" { 
     "id" : "6" , 
-    "pos" : "580,700" , 
+    "pos" : "820,700" , 
     "color" : "255,255,255,255" , 
-    "centered" : "true" , 
+    "centered" : "false" , 
     "scale" : "1.00" , 
-    "label" : "Level:"    
-}
-"text" { 
-    "id" : "7" , 
-    "pos" : "770,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "true" , 
-    "scale" : "1.00" , 
-    "label" : "Time:"    
+    "text" : "Level:"    
 }

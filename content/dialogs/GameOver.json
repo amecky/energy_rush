@@ -1,24 +1,77 @@
-"dialog" { 
-	"name" : "GameOverDialog" 
-}
-"image" {
-	"id" : "11" , "pos" : "140,660" , "rect" : "410,0,660,90" 
-}
-"text" { 
-	"id" : "10" , "pos" : "20,520" , "text" : "Correct bombs marked:" , "scale" : "1.25"
-}
-"text" { 
-	"id" : "12" , "pos" : "520,450" , "text" : "15" , "scale" : "2"
-}
-"text" { 
-	"id" : "13" , "pos" : "360,380" , "text" : "Time:" , "scale" : "1.25"
-}
-"text" { 
-	"id" : "14" , "pos" : "520,310" , "text" : "01:30" , "scale" : "2"
+"numbers" { 
+    "id" : "0" , 
+    "pos" : "560,500" , 
+    "color" : "220,209,0,255" , 
+    "centered" : "false" , 
+    "scale" : "1.50" , 
+    "value" : "0" , 
+    "length" : "3"    
 }
 "button" { 
-	"id" : "1" , "pos" : "100,220" , "text" : "Restart" , "rect" : "610,0,404,64" 
+    "id" : "1" , 
+    "pos" : "100,220" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "true" , 
+    "scale" : "1.00" , 
+    "rect" : "0,1081548800,0,0" , 
+    "text" : "Restart"    
 }
 "button" { 
-	"id" : "2" , "pos" : "100,120" , "text" : "Main Menu" , "rect" : "542,0,404,64" 
+    "id" : "2" , 
+    "pos" : "100,120" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "true" , 
+    "scale" : "1.00" , 
+    "rect" : "0,1081262080,0,0" , 
+    "text" : "Main Menu"    
+}
+"numbers" { 
+    "id" : "3" , 
+    "pos" : "590,380" , 
+    "color" : "220,209,0,255" , 
+    "centered" : "false" , 
+    "scale" : "1.50" , 
+    "value" : "0" , 
+    "length" : "6"    
+}
+"numbers" { 
+    "id" : "4" , 
+    "pos" : "550,450" , 
+    "color" : "220,209,0,255" , 
+    "centered" : "false" , 
+    "scale" : "1.50" , 
+    "value" : "0" , 
+    "length" : "2"    
+}
+"text" { 
+    "id" : "10" , 
+    "pos" : "380,500" , 
+    "color" : "50,89,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "text" : "Collected:"    
+}
+"image" { 
+    "id" : "11" , 
+    "pos" : "140,660" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "true" , 
+    "scale" : "1.00" , 
+    "rect" : "0,0,0,0"    
+}
+"text" { 
+    "id" : "12" , 
+    "pos" : "415,450" , 
+    "color" : "50,89,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "text" : "Level:"    
+}
+"text" { 
+    "id" : "13" , 
+    "pos" : "430,380" , 
+    "color" : "50,89,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "text" : "Time:"    
 }

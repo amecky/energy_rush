@@ -5,7 +5,6 @@
 #include <base\GameStateMachine.h>
 #include "gamestates\MainGameState.h"
 #include "gamestates\GameOverState.h"
-#include "gamestates\MainMenuState.h"
 
 ds::BaseApp *app = new EnergyRush(); 
 
@@ -33,7 +32,7 @@ bool EnergyRush::loadContent() {
 	_context->hudDialog = gui.get("HUD");
 	stateMachine->add(new MainGameState(_context));
 	stateMachine->add(new GameOverState(&gui,_context));
-	stateMachine->add(new MainMenuState(&gui, _context));
+	stateMachine->add(new ds::BasicMenuGameState("MainMenu","MainMenu",&gui));
 	stateMachine->connect("GameOver", 1, "MainGame");
 	stateMachine->connect("GameOver", 2, "MainMenu");
 	stateMachine->connect("MainGame", 1, "GameOver");

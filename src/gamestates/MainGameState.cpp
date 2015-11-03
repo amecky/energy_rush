@@ -12,15 +12,12 @@ MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), 
 
 
 MainGameState::~MainGameState() {
-	
 }
 
 // -------------------------------------------------------
 // init
 // -------------------------------------------------------
 void MainGameState::init() {
-	//_hud.init(0, "xscale");
-	//ds::assets::load("hud", &_hud, ds::CVT_HUD);
 }
 
 // -------------------------------------------------------
@@ -46,7 +43,6 @@ void MainGameState::activate() {
 	_context->collected = 0;
 	_context->points = 0;
 	_context->level = 0;
-	//_context->hud->setTimer(0, 0, 0);
 
 	_context->hudDialog->setNumber(HUD_COLLECTED, 0);
 	_context->hudDialog->setNumber(HUD_BOMBS, 0);
@@ -83,60 +79,56 @@ void MainGameState::deactivate() {
 int MainGameState::onButtonUp(int button, int x, int y) {
 	Hex h = _grid.convertFromMousePos();
 	if (_grid.isValid(h)) {
-		// FIXME: user cannot select bomb
-		int r = _grid.select(x, y);
-		if (_selected != r) {
-			if (_selected == -1) {
-				_selected = r;
-			}
-			else {
-				bool dec = true;
-				// swap elements
-				_grid.swap(_selected, r);
-				std::vector<Hex> list;				
-				_grid.findConnectedItems(h, list);
-				LOG << "1: connected: " << list.size();
-				int firstSize = list.size();
-				GridItem& selItem = _grid.get(_selected);
-				_grid.findConnectedItems(selItem.hex, list);
-				int secondSize = list.size() - firstSize;
-				// check if both will remove more than 2
-				LOG << "2: connected: " << list.size();
-				if (firstSize >= 3 && secondSize >= 3) {					
-					// reset selection
-					_selected = -1;
-					// refill items
-					int itemsKilled = _grid.refill(list);
-					_killed += itemsKilled;
-					_context->kills += itemsKilled;
-					LOG << "killed: " << _killed;
-					int d = _maxBombs - _killed;
-					// all bombs killed -> next level
-					if (d <= 0) {
-						LOG << "NEXT LEVEL";
-						nextLevel();
-						dec = false;
-					}
-					_context->hudDialog->setNumber(HUD_BOMBS, d);
-					// set points
-					_context->collected += list.size();
-					_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
+		const GridItem& item = _grid.get(h);
+		if (item.bombCounter == 0) {
+			int r = _grid.select(x, y);
+			if (_selected != r) {
+				if (_selected == -1) {
+					_selected = r;
 				}
 				else {
-					// swap back - no legal move
-					_grid.swap(r, _selected);
-				}
-				if (dec) {
-					if (_grid.decrementBombs()) {
-						LOG << "GAME OVER!!!";
-						return 1;
+					bool dec = true;
+					// swap elements
+					_grid.swap(_selected, r);
+					std::vector<Hex> list;
+					_grid.findConnectedItems(h, list);
+					int firstSize = list.size();
+					GridItem& selItem = _grid.get(_selected);
+					_grid.findConnectedItems(selItem.hex, list);
+					int secondSize = list.size() - firstSize;
+					// check if both will remove more than 2
+					if (firstSize >= 3 && secondSize >= 3) {
+						// reset selection
+						_selected = -1;
+						// refill items
+						int itemsKilled = _grid.refill(list);
+						_killed += itemsKilled;
+						_context->kills += itemsKilled;
+						int d = _maxBombs - _killed;
+						// all bombs killed -> next level
+						if (d <= 0) {
+							nextLevel();
+							dec = false;
+						}
+						_context->hudDialog->setNumber(HUD_BOMBS, d);
+						// set points
+						_context->collected += list.size();
+						_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
+					}
+					else {
+						// swap back - no legal move
+						_grid.swap(r, _selected);
+					}
+					if (dec) {
+						if (_grid.decrementBombs()) {
+							return 1;
+						}
 					}
 				}
-
 			}
-		}
-		else {
-			_selected = -1;
+			else {
+				_selected = -1;
+			}
 		}
 	}
 	return 0;
@@ -147,9 +139,6 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 int MainGameState::update(float dt) {
 
 	_grid.update(dt);
-
-	//_context->hud->update(dt);
-
 	return 0;
 }
 
