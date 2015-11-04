@@ -139,6 +139,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 int MainGameState::update(float dt) {
 
 	_grid.update(dt);
+	_fadeOutEffect.update(dt);
 	return 0;
 }
 
@@ -146,6 +147,8 @@ int MainGameState::update(float dt) {
 // render
 // -------------------------------------------------------
 void MainGameState::render() {
+	_fadeOutEffect.begin();
+
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
 		int offset = item.color * 40;
@@ -159,6 +162,7 @@ void MainGameState::render() {
 		const GridItem& item = _grid.get(_selected);
 		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, 210, 56, 60)));
 	}
+	_fadeOutEffect.end();
 }
 
 // -------------------------------------------------------
@@ -169,7 +173,10 @@ int MainGameState::onChar(int ascii) {
 		return 1;
 	}
 	if (ascii == 'r') {
-		fillBombs();
+		_fadeOutEffect.activate();
+	}
+	if (ascii == 's') {
+		_fadeOutEffect.deactivate();
 	}
 	return 0;
 }

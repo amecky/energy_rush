@@ -5,6 +5,7 @@
 #include "..\GameContext.h"
 #include "..\HexGrid.h"
 #include <vector>
+#include "..\PostProcessEffect.h"
 
 class MainGameState : public ds::GameState {
 
@@ -30,7 +31,7 @@ private:
 	int _hover;
 	int _width;
 	int _height;
-	
+	FadeOutEffect _fadeOutEffect;
 
 };
 
