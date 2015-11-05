@@ -1,5 +1,10 @@
 #pragma once
 #include <dialogs\GUIDialog.h>
+#include "Board.h"
+#include <data\DynamicSettings.h>
+#include "Constants.h"
+
+class Board;
 
 struct GameContext {
 
@@ -8,6 +13,9 @@ struct GameContext {
 	int level;
 	int kills;
 	ds::GUIDialog* hudDialog;
+	Board* board;
+	ds::DynamicSettings settings;
+	GameSettings gameSettings;
 
 	void reset() {
 		collected = 0;

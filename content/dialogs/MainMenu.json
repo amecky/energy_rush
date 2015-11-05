@@ -8,24 +8,6 @@
     "text" : "Play"    
 }
 "button" { 
-    "id" : "2" , 
-    "pos" : "400,400" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "true" , 
-    "scale" : "1.00" , 
-    "rect" : "370,0,340,60" , 
-    "text" : "Medium"    
-}
-"button" { 
-    "id" : "3" , 
-    "pos" : "400,300" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "true" , 
-    "scale" : "1.00" , 
-    "rect" : "370,0,340,60" , 
-    "text" : "Hard"    
-}
-"button" { 
     "id" : "4" , 
     "pos" : "400,100" , 
     "color" : "255,255,255,255" , 
@@ -35,7 +17,7 @@
     "text" : "Exit"    
 }
 "button" { 
-    "id" : "5" , 
+    "id" : "2" , 
     "pos" : "400,200" , 
     "color" : "255,255,255,255" , 
     "centered" : "true" , 

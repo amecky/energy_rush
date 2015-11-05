@@ -4,7 +4,7 @@
 const FLOAT GRAYSCALE_FACTOR = 2.0f;
 
 FadeOutEffect::FadeOutEffect() : PostProcessEffect() {
-	_rtID = ds::renderer::createRenderTarget(0, ds::Color(0, 0, 0, 255));
+	_rtID = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 255));
 	_shaderID = createFadeShader(0);
 	_fadeTimer = 0.0f;
 }
@@ -58,17 +58,21 @@ int FadeOutEffect::createFadeShader(int textureId) {
 	return ret;
 }
 
+// ----------------------------------------------
+// begin
+// ----------------------------------------------
 void FadeOutEffect::begin() {
 	if (isActive()) {
-		ds::renderer::setRenderTarget(0);
-		if (isActive()) {
-			float norm = _fadeTimer / GRAYSCALE_FACTOR;
-			_shader->setFloat("timer", norm);
-			ds::renderer::setCurrentShader(_shaderID);
-		}
+		ds::renderer::setRenderTarget(_rtID);
+		float norm = _fadeTimer / GRAYSCALE_FACTOR;
+		_shader->setFloat("timer", norm);
+		ds::renderer::setCurrentShader(_shaderID);
 	}
 }
 
+// ----------------------------------------------
+// update
+// ----------------------------------------------
 void FadeOutEffect::update(float dt) {
 	if (isActive()) {
 		_fadeTimer += dt;
@@ -78,11 +82,14 @@ void FadeOutEffect::update(float dt) {
 	}
 }
 
+// ----------------------------------------------
+// end
+// ----------------------------------------------
 void FadeOutEffect::end() {
 	if (isActive()) {
 		int sid = ds::renderer::getDefaultShaderID();
 		ds::renderer::restoreBackBuffer();
-		ds::renderer::draw_render_target(0, _shaderID);
+		ds::renderer::draw_render_target(_rtID, _shaderID);
 		ds::renderer::setCurrentShader(sid);
 	}
 }

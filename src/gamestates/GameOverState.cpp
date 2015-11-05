@@ -19,6 +19,8 @@ void GameOverState::activate() {
 	
 	ds::GUIDialog* dlg = _gui->get("GameOver");
 	std::string str;
+
+	_context->board->fadeOut();
 }
 
 // --------------------------------------------
@@ -32,7 +34,7 @@ void GameOverState::deactivate() {
 // update
 // --------------------------------------------
 int GameOverState::update(float dt) {
-	// nothing to do
+	_context->board->update(dt);
 	return 0;
 }
 
@@ -47,6 +49,7 @@ int GameOverState::onGUIButton(ds::DialogID dlgID, int button) {
 // render
 // --------------------------------------------
 void GameOverState::render() {
+	_context->board->render();
 }
 
 

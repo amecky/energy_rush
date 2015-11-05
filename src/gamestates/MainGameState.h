@@ -6,6 +6,7 @@
 #include "..\HexGrid.h"
 #include <vector>
 #include "..\PostProcessEffect.h"
+#include "..\Board.h"
 
 class MainGameState : public ds::GameState {
 
@@ -26,12 +27,9 @@ private:
 	int _maxBombs;
 	int _killed;
 	GameContext* _context;
-	HexGrid _grid;
-	int _selected;
 	int _hover;
 	int _width;
 	int _height;
-	FadeOutEffect _fadeOutEffect;
 
 };
 

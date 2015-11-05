@@ -12,11 +12,12 @@ EnergyRush::EnergyRush() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0,0,0,255);	
-	//_settings.showEditor = true;
+	_settings.showEditor = true;
 	_context = new GameContext;
 }
 
 EnergyRush::~EnergyRush() {
+	delete _context->board;
 	delete _context;
 }
 
@@ -30,6 +31,7 @@ bool EnergyRush::loadContent() {
 	gui::initialize();
 	initializeGUI();
 	_context->hudDialog = gui.get("HUD");
+	_context->board = new Board;
 	stateMachine->add(new MainGameState(_context));
 	stateMachine->add(new GameOverState(&gui,_context));
 	stateMachine->add(new ds::BasicMenuGameState("MainMenu","MainMenu",&gui));
@@ -43,7 +45,7 @@ bool EnergyRush::loadContent() {
 void EnergyRush::init() {
 	// for testing
 	_context->reset();
-	stateMachine->activate("MainGame");
+	stateMachine->activate("MainMenu");
 }
 
 
@@ -61,7 +63,8 @@ void EnergyRush::draw() {
 }
 
 void EnergyRush::onGUIButton(ds::DialogID dlgID, int button) {
-	if (dlgID == 1 && button == 4) {
+	LOG << "dialog: " << dlgID << " button:" << button;
+	if (dlgID == 4 && button == 4) {
 		shutdown();
 	}
 }

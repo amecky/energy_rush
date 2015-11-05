@@ -1,53 +1,77 @@
-"numbers" { 
-    "id" : "0" , 
-    "pos" : "560,500" , 
-    "color" : "220,209,0,255" , 
-    "centered" : "false" , 
-    "scale" : "1.50" , 
-    "value" : "0" , 
-    "length" : "3"    
-}
 "button" { 
-    "id" : "1" , 
+    "id" : "0" , 
     "pos" : "100,220" , 
     "color" : "255,255,255,255" , 
     "centered" : "true" , 
     "scale" : "1.00" , 
-    "rect" : "0,1081548800,0,0" , 
+    "rect" : "370,0,340,60" , 
     "text" : "Restart"    
 }
 "button" { 
-    "id" : "2" , 
+    "id" : "1" , 
     "pos" : "100,120" , 
     "color" : "255,255,255,255" , 
     "centered" : "true" , 
     "scale" : "1.00" , 
-    "rect" : "0,1081262080,0,0" , 
+    "rect" : "300,0,340,60" , 
     "text" : "Main Menu"    
 }
-"numbers" { 
-    "id" : "3" , 
-    "pos" : "590,380" , 
-    "color" : "220,209,0,255" , 
+"image" { 
+    "id" : "2" , 
+    "pos" : "330,450" , 
+    "color" : "255,255,255,255" , 
     "centered" : "false" , 
+    "scale" : "1.00" , 
+    "rect" : "425,523,180,180"    
+}
+"image" { 
+    "id" : "3" , 
+    "pos" : "500,450" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "rect" : "425,533,160,180"    
+}
+"image" { 
+    "id" : "4" , 
+    "pos" : "675,450" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "rect" : "425,533,190,180"    
+}
+"numbers" { 
+    "id" : "5" , 
+    "pos" : "512,460" , 
+    "color" : "220,209,0,255" , 
+    "centered" : "true" , 
     "scale" : "1.50" , 
     "value" : "0" , 
     "length" : "6"    
 }
 "numbers" { 
-    "id" : "4" , 
-    "pos" : "550,450" , 
+    "id" : "6" , 
+    "pos" : "512,380" , 
     "color" : "220,209,0,255" , 
-    "centered" : "false" , 
+    "centered" : "true" , 
     "scale" : "1.50" , 
     "value" : "0" , 
     "length" : "2"    
+}
+"numbers" { 
+    "id" : "7" , 
+    "pos" : "560,300" , 
+    "color" : "220,209,0,255" , 
+    "centered" : "true" , 
+    "scale" : "1.50" , 
+    "value" : "0" , 
+    "length" : "3"    
 }
 "text" { 
     "id" : "10" , 
     "pos" : "380,500" , 
     "color" : "50,89,255,255" , 
-    "centered" : "false" , 
+    "centered" : "true" , 
     "scale" : "1.00" , 
     "text" : "Collected:"    
 }
@@ -55,23 +79,23 @@
     "id" : "11" , 
     "pos" : "140,660" , 
     "color" : "255,255,255,255" , 
-    "centered" : "true" , 
+    "centered" : "false" , 
     "scale" : "1.00" , 
-    "rect" : "0,0,0,0"    
+    "rect" : "0,0,100,100"    
 }
 "text" { 
     "id" : "12" , 
-    "pos" : "415,450" , 
+    "pos" : "415,420" , 
     "color" : "50,89,255,255" , 
-    "centered" : "false" , 
+    "centered" : "true" , 
     "scale" : "1.00" , 
     "text" : "Level:"    
 }
 "text" { 
     "id" : "13" , 
-    "pos" : "430,380" , 
+    "pos" : "430,340" , 
     "color" : "50,89,255,255" , 
-    "centered" : "false" , 
+    "centered" : "true" , 
     "scale" : "1.00" , 
-    "text" : "Time:"    
+    "text" : "Bombs removed:"    
 }

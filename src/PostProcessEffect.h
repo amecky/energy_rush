@@ -1,6 +1,9 @@
 #pragma once
 #include <renderer\graphics.h>
 
+// ----------------------------------------------
+// Post process effect
+// ----------------------------------------------
 class PostProcessEffect {
 
 public:
@@ -23,6 +26,9 @@ private:
 
 };
 
+// ----------------------------------------------
+// fade out effect
+// ----------------------------------------------
 class FadeOutEffect : public PostProcessEffect {
 
 public:
@@ -33,7 +39,7 @@ public:
 	void end();
 private:
 	int createFadeShader(int textureId);
-	int _rtID;
+	ds::RTID _rtID;
 	float _fadeTimer;
 	ds::Shader* _shader;
 	int _shaderID;
