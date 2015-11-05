@@ -1,7 +1,7 @@
 #include "PostProcessEffect.h"
 #include <renderer\graphics.h>
 
-const FLOAT GRAYSCALE_FACTOR = 2.0f;
+const FLOAT GRAYSCALE_FACTOR = 4.0f;
 
 FadeOutEffect::FadeOutEffect() : PostProcessEffect() {
 	_rtID = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 255));
@@ -58,6 +58,11 @@ int FadeOutEffect::createFadeShader(int textureId) {
 	return ret;
 }
 
+
+void FadeOutEffect::activate() {
+	_fadeTimer = 0.0f;
+	PostProcessEffect::activate();
+}
 // ----------------------------------------------
 // begin
 // ----------------------------------------------
@@ -89,7 +94,7 @@ void FadeOutEffect::end() {
 	if (isActive()) {
 		int sid = ds::renderer::getDefaultShaderID();
 		ds::renderer::restoreBackBuffer();
-		ds::renderer::draw_render_target(_rtID, _shaderID);
+		ds::renderer::draw_render_target_additive(_rtID, _shaderID);
 		ds::renderer::setCurrentShader(sid);
 	}
 }

@@ -128,6 +128,11 @@ int Board::update(float dt) {
 // render
 // -------------------------------------------------------
 void Board::render() {
+	ds::sprites::draw(v2(256, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
+	ds::sprites::draw(v2(768, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
+	ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
+	ds::sprites::draw(v2(768, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
+
 	_fadeOutEffect.begin();
 
 	for (int i = 0; i < _grid.size(); ++i) {

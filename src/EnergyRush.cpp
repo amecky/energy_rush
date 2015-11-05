@@ -5,6 +5,8 @@
 #include <base\GameStateMachine.h>
 #include "gamestates\MainGameState.h"
 #include "gamestates\GameOverState.h"
+#include "gamestates\MainMenuState.h"
+#include "gamestates\HighscoreState.h"
 
 ds::BaseApp *app = new EnergyRush(); 
 
@@ -34,18 +36,19 @@ bool EnergyRush::loadContent() {
 	_context->board = new Board;
 	stateMachine->add(new MainGameState(_context));
 	stateMachine->add(new GameOverState(&gui,_context));
-	stateMachine->add(new ds::BasicMenuGameState("MainMenu","MainMenu",&gui));
+	stateMachine->add(new HighscoreState(&gui, _context));
+	stateMachine->add(new MainMenuState(&gui, _context));
 	stateMachine->connect("GameOver", 1, "MainGame");
-	stateMachine->connect("GameOver", 2, "MainMenu");
+	stateMachine->connect("GameOver", 2, "MainMenuState");
 	stateMachine->connect("MainGame", 1, "GameOver");
-	stateMachine->connect("MainMenu", 1, "MainGame");
+	stateMachine->connect("MainMenuState", 3, "MainGame");
 	return true;
 }
 
 void EnergyRush::init() {
 	// for testing
 	_context->reset();
-	stateMachine->activate("MainMenu");
+	stateMachine->activate("MainMenuState");
 }
 
 

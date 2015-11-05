@@ -1,54 +1,48 @@
-#include "GameOverState.h"
+#include "HighscoreState.h"
 #include <utils\Log.h>
 #include <sprites\SpriteBatch.h>
 #include <renderer\graphics.h>
 #include <base\GameStateMachine.h>
 
-GameOverState::GameOverState(ds::DialogManager* gui, GameContext* context) : ds::GameState("GameOver"), _context(context), _gui(gui) {
+HighscoreState::HighscoreState(ds::DialogManager* gui, GameContext* context) : ds::GameState("HighscoreState"), _context(context), _gui(gui) {
 }
 
 
-GameOverState::~GameOverState() {
-}
-
-// --------------------------------------------
-// activate
-// --------------------------------------------
-void GameOverState::activate() {
-	_gui->activate("GameOver");	
-	
-	ds::GUIDialog* dlg = _gui->get("GameOver");
-	std::string str;
-
-	_context->board->fadeOut();
+HighscoreState::~HighscoreState() {
 }
 
 // --------------------------------------------
 // activate
 // --------------------------------------------
-void GameOverState::deactivate() {
-	_gui->deactivate("GameOver");
+void HighscoreState::activate() {
+	_gui->activate("Highscores");	
+}
+
+// --------------------------------------------
+// activate
+// --------------------------------------------
+void HighscoreState::deactivate() {
+	_gui->deactivate("Highscores");
 }
 
 // --------------------------------------------
 // update
 // --------------------------------------------
-int GameOverState::update(float dt) {
-	
+int HighscoreState::update(float dt) {
 	return 0;
 }
 
 // --------------------------------------------
 // click
 // --------------------------------------------
-int GameOverState::onGUIButton(ds::DialogID dlgID, int button) {	
+int HighscoreState::onGUIButton(ds::DialogID dlgID, int button) {
 	return button;
 }
 
 // --------------------------------------------
 // render
 // --------------------------------------------
-void GameOverState::render() {
+void HighscoreState::render() {
 	ds::sprites::draw(v2(256, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	ds::sprites::draw(v2(768, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));

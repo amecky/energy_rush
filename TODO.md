@@ -1,11 +1,12 @@
 # TODO
 
-- [ ] find correct origin for easy and medium
-- [ ] Highscores
-
-## 23.10.2015
-
-- [x] show SUCCESS / FAILURE on game over menu
-- [x] Minesweeper Logo
-- [x] fill game over menu with data
-- [x] move marked and so on to score or put HUD into game context
+- [ ] highscore state with background
+- [ ]  main meu state with background
+- [ ] calculate highscore based on collected / bombs cleared / level
+- [ ] save / load highscores
+- [ ] build intro dialog
+- [ ] sound effects
+- [ ] pulsating selector (color? size?)
+- [ ] flash (by size) one of the bombs periodically
+- [ ] flash all bombs after click
+- [ ] dynamic settings

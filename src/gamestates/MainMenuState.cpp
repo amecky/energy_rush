@@ -1,54 +1,48 @@
-#include "GameOverState.h"
+#include "MainMenuState.h"
 #include <utils\Log.h>
 #include <sprites\SpriteBatch.h>
 #include <renderer\graphics.h>
 #include <base\GameStateMachine.h>
 
-GameOverState::GameOverState(ds::DialogManager* gui, GameContext* context) : ds::GameState("GameOver"), _context(context), _gui(gui) {
+MainMenuState::MainMenuState(ds::DialogManager* gui, GameContext* context) : ds::GameState("MainMenuState"), _context(context), _gui(gui) {
 }
 
 
-GameOverState::~GameOverState() {
-}
-
-// --------------------------------------------
-// activate
-// --------------------------------------------
-void GameOverState::activate() {
-	_gui->activate("GameOver");	
-	
-	ds::GUIDialog* dlg = _gui->get("GameOver");
-	std::string str;
-
-	_context->board->fadeOut();
+MainMenuState::~MainMenuState() {
 }
 
 // --------------------------------------------
 // activate
 // --------------------------------------------
-void GameOverState::deactivate() {
-	_gui->deactivate("GameOver");
+void MainMenuState::activate() {
+	_gui->activate("MainMenu");		
+}
+
+// --------------------------------------------
+// activate
+// --------------------------------------------
+void MainMenuState::deactivate() {
+	_gui->deactivate("MainMenu");
 }
 
 // --------------------------------------------
 // update
 // --------------------------------------------
-int GameOverState::update(float dt) {
-	
+int MainMenuState::update(float dt) {
 	return 0;
 }
 
 // --------------------------------------------
 // click
 // --------------------------------------------
-int GameOverState::onGUIButton(ds::DialogID dlgID, int button) {	
+int MainMenuState::onGUIButton(ds::DialogID dlgID, int button) {
 	return button;
 }
 
 // --------------------------------------------
 // render
 // --------------------------------------------
-void GameOverState::render() {
+void MainMenuState::render() {
 	ds::sprites::draw(v2(256, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	ds::sprites::draw(v2(768, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));

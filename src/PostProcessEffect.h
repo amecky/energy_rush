@@ -12,7 +12,7 @@ public:
 	virtual void begin() = 0;
 	virtual void update(float dt) {}
 	virtual void end() = 0;
-	void activate() {
+	virtual void activate() {
 		_active = true;
 	}
 	void deactivate() {
@@ -37,6 +37,7 @@ public:
 	void begin();
 	void update(float dt);
 	void end();
+	void activate();
 private:
 	int createFadeShader(int textureId);
 	ds::RTID _rtID;

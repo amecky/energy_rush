@@ -1,5 +1,13 @@
-"button" { 
+"image" { 
     "id" : "0" , 
+    "pos" : "140,660" , 
+    "color" : "255,255,255,255" , 
+    "centered" : "false" , 
+    "scale" : "1.00" , 
+    "rect" : "0,0,100,100"    
+}
+"button" { 
+    "id" : "1" , 
     "pos" : "100,220" , 
     "color" : "255,255,255,255" , 
     "centered" : "true" , 
@@ -8,7 +16,7 @@
     "text" : "Restart"    
 }
 "button" { 
-    "id" : "1" , 
+    "id" : "2" , 
     "pos" : "100,120" , 
     "color" : "255,255,255,255" , 
     "centered" : "true" , 
@@ -17,7 +25,7 @@
     "text" : "Main Menu"    
 }
 "image" { 
-    "id" : "2" , 
+    "id" : "3" , 
     "pos" : "330,450" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
@@ -25,7 +33,7 @@
     "rect" : "425,523,180,180"    
 }
 "image" { 
-    "id" : "3" , 
+    "id" : "4" , 
     "pos" : "500,450" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
@@ -33,7 +41,7 @@
     "rect" : "425,533,160,180"    
 }
 "image" { 
-    "id" : "4" , 
+    "id" : "5" , 
     "pos" : "675,450" , 
     "color" : "255,255,255,255" , 
     "centered" : "false" , 
@@ -41,7 +49,7 @@
     "rect" : "425,533,190,180"    
 }
 "numbers" { 
-    "id" : "5" , 
+    "id" : "6" , 
     "pos" : "512,460" , 
     "color" : "220,209,0,255" , 
     "centered" : "true" , 
@@ -50,7 +58,7 @@
     "length" : "6"    
 }
 "numbers" { 
-    "id" : "6" , 
+    "id" : "7" , 
     "pos" : "512,380" , 
     "color" : "220,209,0,255" , 
     "centered" : "true" , 
@@ -59,7 +67,7 @@
     "length" : "2"    
 }
 "numbers" { 
-    "id" : "7" , 
+    "id" : "8" , 
     "pos" : "560,300" , 
     "color" : "220,209,0,255" , 
     "centered" : "true" , 
@@ -68,23 +76,14 @@
     "length" : "3"    
 }
 "text" { 
-    "id" : "10" , 
+    "id" : "9" , 
     "pos" : "380,500" , 
     "color" : "50,89,255,255" , 
     "centered" : "true" , 
     "scale" : "1.00" , 
     "text" : "Collected:"    
-}
-"image" { 
-    "id" : "11" , 
-    "pos" : "140,660" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "rect" : "0,0,100,100"    
-}
 "text" { 
-    "id" : "12" , 
+    "id" : "10" , 
     "pos" : "415,420" , 
     "color" : "50,89,255,255" , 
     "centered" : "true" , 
@@ -92,7 +91,7 @@
     "text" : "Level:"    
 }
 "text" { 
-    "id" : "13" , 
+    "id" : "11" , 
     "pos" : "430,340" , 
     "color" : "50,89,255,255" , 
     "centered" : "true" , 
