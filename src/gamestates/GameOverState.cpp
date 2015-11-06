@@ -18,8 +18,11 @@ void GameOverState::activate() {
 	_gui->activate("GameOver");	
 	
 	ds::GUIDialog* dlg = _gui->get("GameOver");
-	std::string str;
-
+	dlg->setNumber(6, _context->collected);
+	dlg->setNumber(8, _context->level);
+	dlg->setNumber(9, _context->kills);
+	_context->points = _context->collected * 10 + (_context->level - 1) * 1000 + _context->kills * 100;
+	dlg->setNumber(14, _context->points);
 	_context->board->fadeOut();
 }
 

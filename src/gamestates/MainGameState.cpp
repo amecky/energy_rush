@@ -5,6 +5,8 @@
 
 MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), _context(context) {
 	_maxBombs = 2;
+	_width = 20;
+	_height = 15;
 }
 
 
@@ -32,12 +34,10 @@ void MainGameState::activate() {
 	_context->hudDialog->activate();
 
 	_maxBombs = 2;
-	_width = 20;
-	_height = 15;
-	
 	_context->collected = 0;
 	_context->points = 0;
 	_context->level = 0;
+	_context->kills = 0;
 
 	_context->hudDialog->setNumber(HUD_COLLECTED, 0);
 	_context->hudDialog->setNumber(HUD_BOMBS, 0);
@@ -54,7 +54,7 @@ void MainGameState::nextLevel() {
 	++_context->level;
 	_hover = -1;
 	_killed = 0;
-	_context->kills = 0;
+	//_context->kills = 0;
 	_maxBombs = _context->level * 2;
 	_context->board->nextLevel(_context->level);
 	_context->hudDialog->setNumber(HUD_LEVEL, _context->level);
