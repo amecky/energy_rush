@@ -29,6 +29,7 @@ public:
 	void refill();
 	void nextLevel(int level);
 	void fadeOut();
+	void flashBombs();
 private:	
 	int _maxBombs;
 	int _killed;
@@ -37,6 +38,7 @@ private:
 	int _hover;
 	int _width;
 	int _height;
-	FadeOutEffect _fadeOutEffect;
+	FadeOutEffect* _fadeOutEffect;
+	FadeOutEffectSettings _settings;
 };
 

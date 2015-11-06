@@ -3,6 +3,8 @@
 #include <renderer\graphics.h>
 #include <math\tweening.h>
 
+const float COUNTER_FLASH_TTL = 0.6f;
+
 HexGrid::HexGrid() : _qMax(0), _rMax(0), _items(0), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 130)) , _hover(-1) {
 }
 
@@ -40,6 +42,8 @@ void HexGrid::fill() {
 			item.color = ds::math::random(0, 4);
 			item.state = IS_GROW;
 			item.timer = 0.0f;
+			item.counterScale = 1.0f;
+			item.counterTimer = 0.0f;
 			int idx = (q + q_offset) + r * _qMax;
 			_items[idx] = item;
 		}
@@ -231,6 +235,16 @@ bool HexGrid::decrementBombs() {
 	return false;
 }
 
+void HexGrid::flashBombs() {
+	for (int i = 0; i < size(); ++i) {
+		GridItem& item = get(i);
+		if (item.bombCounter > 0) {
+			item.counterScale = 1.0f;
+			item.counterTimer = COUNTER_FLASH_TTL;
+		}
+	}
+}
+
 // -------------------------------------------------------
 // update
 // -------------------------------------------------------
@@ -265,6 +279,15 @@ void HexGrid::update(float dt) {
 			if (norm >= 1.0f) {
 				item.state = IS_NORMAL;
 				item.scale = v2(1, 1);
+			}
+		}
+		if (item.bombCounter > 0 && item.counterTimer > 0.0f) {
+			item.counterTimer -= dt;
+			float norm = item.counterTimer / COUNTER_FLASH_TTL;
+			item.counterScale = 1.0f + abs(sin(norm * TWO_PI) * 0.4f);
+			if (item.counterTimer <= 0.0f) {
+				item.counterTimer = 0.0f;
+				item.counterScale = 1.0f;
 			}
 		}
 	}

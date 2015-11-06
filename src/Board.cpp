@@ -8,10 +8,13 @@ Board::Board() {
 	_maxBombs = 2;
 	_grid.resize(20, 15);
 	_grid.setOrigin(v2(100, 100));
+	_settings.fadeTTL = 4.0f;
+	_fadeOutEffect = new FadeOutEffect(&_settings);
 }
 
 
 Board::~Board() {
+	delete _fadeOutEffect;
 }
 
 // -------------------------------------------------------
@@ -30,7 +33,7 @@ void Board::activate() {
 	_width = 20;
 	_height = 15;
 	_selected = -1;
-	_fadeOutEffect.deactivate();
+	_fadeOutEffect->deactivate();
 }
 
 // -------------------------------------------------------
@@ -42,7 +45,7 @@ void Board::nextLevel(int level) {
 	_maxBombs = level * 2;
 	refill();	
 	_grid.decrementBombs();
-	_fadeOutEffect.deactivate();
+	_fadeOutEffect->deactivate();
 }
 // -------------------------------------------------------
 // dactivate
@@ -51,7 +54,7 @@ void Board::deactivate() {
 }
 
 void Board::fadeOut() {
-	_fadeOutEffect.activate();
+	_fadeOutEffect->activate();
 }
 
 // -------------------------------------------------------
@@ -101,7 +104,8 @@ ClickResult Board::onClick(int x, int y) {
 						_grid.swap(r, _selected);
 					}
 					if (dec) {
-						if (_grid.decrementBombs()) {
+						_grid.flashBombs();
+						if (_grid.decrementBombs()) {							
 							result.killed = true;
 						}
 					}
@@ -118,12 +122,14 @@ ClickResult Board::onClick(int x, int y) {
 // Update
 // -------------------------------------------------------
 int Board::update(float dt) {
-
 	_grid.update(dt);
-	_fadeOutEffect.update(dt);
+	_fadeOutEffect->update(dt);
 	return 0;
 }
 
+void Board::flashBombs() {
+	_grid.flashBombs();
+}
 // -------------------------------------------------------
 // render
 // -------------------------------------------------------
@@ -133,7 +139,7 @@ void Board::render() {
 	ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	ds::sprites::draw(v2(768, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 
-	_fadeOutEffect.begin();
+	_fadeOutEffect->begin();
 
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
@@ -141,12 +147,12 @@ void Board::render() {
 		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)), 0.0f, item.scale.x, item.scale.y);
 		if (item.bombCounter > 0 && (item.state == IS_NORMAL || item.state == IS_WIGGLE)) {
 			offset = 200 + (item.bombCounter - 1) * 30;
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, offset, 30, 18)), 0.0f, 1.0f, 1.0f, ds::Color(192, 192, 192, 255));
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, offset, 30, 18)), 0.0f, item.counterScale, item.counterScale, ds::Color(192, 192, 192, 255));
 		}
 	}
 	if (_selected != -1) {
 		const GridItem& item = _grid.get(_selected);
 		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, 210, 56, 60)));
 	}
-	_fadeOutEffect.end();
+	_fadeOutEffect->end();
 }

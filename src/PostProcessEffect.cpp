@@ -1,9 +1,7 @@
 #include "PostProcessEffect.h"
 #include <renderer\graphics.h>
 
-const FLOAT GRAYSCALE_FACTOR = 4.0f;
-
-FadeOutEffect::FadeOutEffect() : PostProcessEffect() {
+FadeOutEffect::FadeOutEffect(FadeOutEffectSettings *settings) : PostProcessEffect() ,_settings(settings) {
 	_rtID = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 255));
 	_shaderID = createFadeShader(0);
 	_fadeTimer = 0.0f;
@@ -69,7 +67,7 @@ void FadeOutEffect::activate() {
 void FadeOutEffect::begin() {
 	if (isActive()) {
 		ds::renderer::setRenderTarget(_rtID);
-		float norm = _fadeTimer / GRAYSCALE_FACTOR;
+		float norm = _fadeTimer / _settings->fadeTTL;
 		_shader->setFloat("timer", norm);
 		ds::renderer::setCurrentShader(_shaderID);
 	}
@@ -81,8 +79,8 @@ void FadeOutEffect::begin() {
 void FadeOutEffect::update(float dt) {
 	if (isActive()) {
 		_fadeTimer += dt;
-		if (_fadeTimer > GRAYSCALE_FACTOR) {
-			_fadeTimer = GRAYSCALE_FACTOR;
+		if (_fadeTimer > _settings->fadeTTL) {
+			_fadeTimer = _settings->fadeTTL;
 		}
 	}
 }

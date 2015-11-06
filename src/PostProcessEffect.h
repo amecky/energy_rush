@@ -29,10 +29,16 @@ private:
 // ----------------------------------------------
 // fade out effect
 // ----------------------------------------------
+struct FadeOutEffectSettings {
+
+	float fadeTTL;
+
+};
+
 class FadeOutEffect : public PostProcessEffect {
 
 public:
-	FadeOutEffect();
+	FadeOutEffect(FadeOutEffectSettings *settings);
 	~FadeOutEffect() {}
 	void begin();
 	void update(float dt);
@@ -44,4 +50,5 @@ private:
 	float _fadeTimer;
 	ds::Shader* _shader;
 	int _shaderID;
+	FadeOutEffectSettings* _settings;
 };

@@ -82,7 +82,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 	_killed += result.bombsRemoved;
 	_context->kills += result.bombsRemoved;
 	int d = _maxBombs - _killed;
-	_context->hudDialog->setNumber(HUD_BOMBS, d);
+	_context->hudDialog->setNumber(HUD_BOMBS, d);	
 	if (result.finished) {
 		nextLevel();
 	}	
@@ -117,6 +117,9 @@ int MainGameState::onChar(int ascii) {
 	}
 	if (ascii == 'r') {
 		_context->board->fadeOut();
+	}
+	if (ascii == 'f') {
+		_context->board->flashBombs();
 	}
 	return 0;
 }

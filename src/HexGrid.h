@@ -19,6 +19,8 @@ struct GridItem {
 	int color;
 	ItemState state;
 	float timer;
+	float counterScale;
+	float counterTimer;
 };
 
 class HexGrid {
@@ -48,6 +50,7 @@ public:
 	void findConnectedItems(const Hex& h, std::vector<Hex>& list);
 	int refill(const std::vector<Hex>& list);
 	bool decrementBombs();
+	void flashBombs();
 private:
 	int _qMax;
 	int _rMax;
