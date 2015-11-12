@@ -14,7 +14,6 @@ struct GameContext {
 	int kills;
 	ds::GUIDialog* hudDialog;
 	Board* board;
-	ds::DynamicSettings settings;
 	GameSettings gameSettings;
 
 	void reset() {

@@ -14,7 +14,7 @@ EnergyRush::EnergyRush() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0,0,0,255);	
-	_settings.showEditor = true;
+	//_settings.showEditor = true;
 	_context = new GameContext;
 }
 
@@ -29,9 +29,10 @@ EnergyRush::~EnergyRush() {
 bool EnergyRush::loadContent() {	
 	int texture = ds::renderer::loadTexture("TextureArray");
 	assert(texture != -1);
-	ds::sprites::initializeTextSystem(texture, "xscale");
+	ds::BitmapFont* font = ds::assets::loadFont("xscale", texture);
+	ds::sprites::initializeTextSystem(font);
 	gui::initialize();
-	initializeGUI();
+	initializeGUI(font);
 	_context->hudDialog = gui.get("HUD");
 	_context->board = new Board;
 	stateMachine->add(new MainGameState(_context));
@@ -67,7 +68,7 @@ void EnergyRush::draw() {
 
 void EnergyRush::onGUIButton(ds::DialogID dlgID, int button) {
 	LOG << "dialog: " << dlgID << " button:" << button;
-	if (dlgID == 4 && button == 4) {
+	if (dlgID == 4 && button == 1) {
 		shutdown();
 	}
 }
