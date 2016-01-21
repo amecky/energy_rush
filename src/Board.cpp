@@ -134,20 +134,14 @@ void Board::flashBombs() {
 // render
 // -------------------------------------------------------
 void Board::render() {
-	//ds::sprites::draw(v2(256, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
-	//ds::sprites::draw(v2(768, 192), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
-	//ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
-	//ds::sprites::draw(v2(768, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
-
 	_fadeOutEffect->begin();
-
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
 		int offset = item.color * 40;
-		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)), 0.0f, item.scale.x, item.scale.y);
+		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 46)), 0.0f, item.scale.x, item.scale.y);
 		if (item.bombCounter > 0 && (item.state == IS_NORMAL || item.state == IS_WIGGLE)) {
 			offset = 200 + (item.bombCounter - 1) * 30;
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, offset, 30, 18)), 0.0f, item.counterScale, item.counterScale, ds::Color(192, 192, 192, 255));
+			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(18, offset, 30, 30)), 0.0f, item.counterScale, item.counterScale, ds::Color(192, 192, 192, 255));
 		}
 	}
 	if (_selected != -1) {

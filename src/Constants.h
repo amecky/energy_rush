@@ -15,7 +15,9 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("grayScaleFactor", &grayScaleFactor, 2.0f);
 	}
 
-	const char* getName() const {
+	const char* getFileName() const {
 		return "gameplay_settings";
 	}
+
+
 };

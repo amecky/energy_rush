@@ -1,51 +1,75 @@
-"text" { 
-    "id" : "0" , 
-    "pos" : "510,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "text" : "Bombs:"    
+image { 
+    id : 7
+    pos : 120,710
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    rect : 440,0,200,70
 }
-"text" { 
-    "id" : "1" , 
-    "pos" : "140,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "text" : "Collected:"    
+image { 
+    id : 8
+    pos : 512,710
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 440,0,200,70
 }
-"numbers" { 
-    "id" : "3" , 
-    "pos" : "290,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "value" : "0" , 
-    "length" : "3"    
+image { 
+    id : 9
+    pos : 900,710
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    rect : 440,0,200,70
 }
-"numbers" { 
-    "id" : "4" , 
-    "pos" : "620,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "value" : "0" , 
-    "length" : "2"    
+text { 
+    id : 0
+    pos : 510,725
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    text : "Bombs"
 }
-"numbers" { 
-    "id" : "5" , 
-    "pos" : "920,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "value" : "0" , 
-    "length" : "2"    
+text { 
+    id : 1
+    pos : 120,725
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    text : "Collected"
 }
-"text" { 
-    "id" : "6" , 
-    "pos" : "820,700" , 
-    "color" : "255,255,255,255" , 
-    "centered" : "false" , 
-    "scale" : "1.00" , 
-    "text" : "Level:"    
+numbers { 
+    id : 3
+    pos : 120,695
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    value : 107
+    length : 3
+}
+numbers { 
+    id : 4
+    pos : 620,695
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    value : 6
+    length : 2
+}
+numbers { 
+    id : 5
+    pos : 900,695
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    value : 3
+    length : 2
+}
+text { 
+    id : 6
+    pos : 900,725
+    color : 255,255,255,255
+    centered : false
+    scale : 1
+    text : "Level"
 }

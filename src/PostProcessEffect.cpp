@@ -38,8 +38,9 @@ int FadeOutEffect::createFadeShader(int textureId) {
 		"}\r\n"
 		"float4 BasicPS(OutputVS input) : COLOR {\r\n"
 		"	float4 clr = tex2D(TexS, input.tex0);\r\n"
-		"	float3 greyscale = dot(clr.rgb, float3(0.30, 0.59, 0.11)); \r\n"
-		"	float3 rgb = lerp(clr.rgb, greyscale, timer); \r\n"
+		"	float4 grey = dot(clr, float4(0.30, 0.59, 0.11,1.0)); \r\n"
+		"	//float4 grey = dot(clr, greyscale); \r\n"
+		"	float3 rgb = lerp(clr.rgb, grey.rgb, timer); \r\n"
 		"	return float4(rgb, clr.a);\r\n"
 		"}\r\n"
 		"technique FadeTech {\r\n"
@@ -92,7 +93,8 @@ void FadeOutEffect::end() {
 	if (isActive()) {
 		int sid = ds::renderer::getDefaultShaderID();
 		ds::renderer::restoreBackBuffer();
-		ds::renderer::draw_render_target_additive(_rtID, _shaderID);
+		//ds::renderer::draw_render_target_additive(_rtID, _shaderID);
+		ds::renderer::draw_render_target(_rtID, _shaderID);
 		ds::renderer::setCurrentShader(sid);
 	}
 }

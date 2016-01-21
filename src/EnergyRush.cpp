@@ -23,23 +23,23 @@ EnergyRush::~EnergyRush() {
 // Load content and prepare game
 // -------------------------------------------------------
 bool EnergyRush::loadContent() {	
-	_context->hudDialog = gui.get("HUD");
+	_context->hudDialog = gui->get("HUD");
 	_context->board = new Board;
-	stateMachine->add(new MainGameState(_context));
-	stateMachine->add(new GameOverState(&gui,_context));
-	stateMachine->add(new HighscoreState(&gui, _context));
-	stateMachine->add(new MainMenuState(&gui, _context));
-	stateMachine->connect("GameOver", 1, "MainGame");
-	stateMachine->connect("GameOver", 2, "MainMenuState");
-	stateMachine->connect("MainGame", 1, "GameOver");
-	stateMachine->connect("MainMenuState", 3, "MainGame");
+	addGameState(new MainGameState(_context));
+	addGameState(new GameOverState(gui, _context));
+	addGameState(new HighscoreState(gui, _context));
+	addGameState(new MainMenuState(gui, _context));
+	connectGameStates("GameOver", 1, "MainGame");
+	connectGameStates("GameOver", 2, "MainMenuState");
+	connectGameStates("MainGame", 1, "GameOver");
+	connectGameStates("MainMenuState", 3, "MainGame");
 	return true;
 }
 
 void EnergyRush::init() {
 	// for testing
 	_context->reset();
-	stateMachine->activate("MainMenuState");
+	activate("MainMenuState");
 }
 
 
