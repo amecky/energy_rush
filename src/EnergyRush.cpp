@@ -11,10 +11,6 @@
 ds::BaseApp *app = new EnergyRush(); 
 
 EnergyRush::EnergyRush() : ds::BaseApp() {
-	_settings.screenWidth = 1024;
-	_settings.screenHeight = 768;
-	_settings.clearColor = ds::Color(0,0,0,255);	
-	//_settings.showEditor = true;
 	_context = new GameContext;
 }
 
@@ -27,12 +23,6 @@ EnergyRush::~EnergyRush() {
 // Load content and prepare game
 // -------------------------------------------------------
 bool EnergyRush::loadContent() {	
-	int texture = ds::renderer::loadTexture("TextureArray");
-	assert(texture != -1);
-	ds::BitmapFont* font = ds::assets::loadFont("xscale", texture);
-	ds::sprites::initializeTextSystem(font);
-	gui::initialize();
-	initializeGUI(font);
 	_context->hudDialog = gui.get("HUD");
 	_context->board = new Board;
 	stateMachine->add(new MainGameState(_context));
