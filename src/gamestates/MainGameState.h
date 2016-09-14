@@ -26,6 +26,8 @@ private:
 	int _maxBombs;
 	int _killed;
 	GameContext* _context;
+	ds::GUIDialog* _hud;
+	ds::GUIDialog* _gameOver;
 	int _hover;
 	int _width;
 	int _height;

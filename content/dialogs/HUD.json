@@ -1,75 +1,51 @@
-image { 
-    id : 7
-    pos : 120,720
-    color : 255,255,255,255
-    centered : false
-    scale : 1
-    rect : 440,0,200,70
-}
-image { 
-    id : 8
-    pos : 512,720
-    color : 255,255,255,255
-    centered : false
-    scale : 1
-    rect : 440,0,200,70
-}
-image { 
-    id : 9
-    pos : 900,720
-    color : 255,255,255,255
-    centered : false
-    scale : 1
-    rect : 440,0,200,70
-}
 text { 
     id : 0
     pos : 510,740
-    color : 255,255,255,255
+    color : 67,129,222,255
     centered : false
-    scale : 1
+    scale : 1,1
     text : "Bombs"
 }
 text { 
     id : 1
     pos : 120,740
-    color : 255,255,255,255
+    color : 67,129,222,255
     centered : false
-    scale : 1
+    scale : 1,1
     text : "Collected"
 }
 numbers { 
     id : 3
     pos : 120,710
-    color : 255,255,255,255
+    color : 230,180,0,255
     centered : false
-    scale : 1
+    scale : 1,1
     value : 0
     length : 3
 }
 numbers { 
     id : 4
     pos : 510,710
-    color : 255,255,255,255
+    color : 230,180,0,255
     centered : false
-    scale : 1
+    scale : 1,1
     value : 2
     length : 2
 }
 numbers { 
     id : 5
     pos : 900,710
-    color : 255,255,255,255
+    color : 230,180,0,255
     centered : false
-    scale : 1
+    scale : 1,1
     value : 1
     length : 2
 }
 text { 
     id : 6
     pos : 900,740
-    color : 255,255,255,255
+    color : 67,129,222,255
     centered : false
-    scale : 1
+    scale : 1,1
     text : "Level"
 }

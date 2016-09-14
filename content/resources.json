@@ -13,10 +13,20 @@ texture {
 	file : "TextureArray.png"
 }
 font {
-	name : "xscale"
+	name : "nullshock"
 	file : "nullshock.json"
 }
 font {
 	name : "gui_font"
 	file : "gui_font.json"
+}
+dialog {
+    name : "HUD"
+    file : "HUD"
+    font : "nullshock"
+}
+dialog {
+    name : "GameOver"
+    file : "GameOver"
+    font : "nullshock"
 }

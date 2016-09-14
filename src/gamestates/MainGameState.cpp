@@ -8,6 +8,8 @@ MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), 
 	_width = 20;
 	_height = 15;
 	_board = new Board(context);
+	_hud = ds::res::getGUIDialog("HUD");
+	_gameOver = ds::res::getGUIDialog("GameOver");
 }
 
 
@@ -33,7 +35,7 @@ void MainGameState::fillBombs() {
 // -------------------------------------------------------
 void MainGameState::activate() {
 	
-	//_context->hudDialog->activate();
+	_hud->activate();
 
 	_maxBombs = 2;
 	_context->collected = 0;
@@ -41,9 +43,11 @@ void MainGameState::activate() {
 	_context->level = 0;
 	_context->kills = 0;
 
-	//_context->hudDialog->setNumber(HUD_COLLECTED, 0);
-	//_context->hudDialog->setNumber(HUD_BOMBS, 0);
-	//_context->hudDialog->setNumber(HUD_LEVEL, 0);
+	_hud->setNumber(HUD_COLLECTED, 0);
+	_hud->setNumber(HUD_BOMBS, 0);
+	_hud->setNumber(HUD_LEVEL, 0);
+
+	_gameOver->activate();
 
 	nextLevel();
 	
@@ -59,8 +63,8 @@ void MainGameState::nextLevel() {
 	//_context->kills = 0;
 	_maxBombs = _context->level * 2;
 	_board->nextLevel(_context->level);
-	//_context->hudDialog->setNumber(HUD_LEVEL, _context->level);
-	//_context->hudDialog->setNumber(HUD_BOMBS, _maxBombs);
+	_hud->setNumber(HUD_LEVEL, _context->level);
+	_hud->setNumber(HUD_BOMBS, _maxBombs);
 	
 	//_grid.decrementBombs();
 }
@@ -68,7 +72,7 @@ void MainGameState::nextLevel() {
 // dactivate
 // -------------------------------------------------------
 void MainGameState::deactivate() {
-	//_context->hudDialog->deactivate();
+	_hud->deactivate();
 }
 
 // -------------------------------------------------------
@@ -80,11 +84,11 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 		return 1;
 	}
 	_context->collected += result.collected;
-	//_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
+	_hud->setNumber(HUD_COLLECTED, _context->collected);
 	_killed += result.bombsRemoved;
 	_context->kills += result.bombsRemoved;
 	int d = _maxBombs - _killed;
-	//_context->hudDialog->setNumber(HUD_BOMBS, d);	
+	_hud->setNumber(HUD_BOMBS, d);
 	if (result.finished) {
 		nextLevel();
 	}	
@@ -96,6 +100,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 int MainGameState::update(float dt) {
 
 	_board->update(dt);
+	_hud->tick(dt);
 	return 0;
 }
 
@@ -105,6 +110,8 @@ int MainGameState::update(float dt) {
 void MainGameState::render() {
 	//ds::sprites::draw(v2(512, 384), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f), 0.0f, 2.0f, 2.0f);
 	_board->render();
+	_hud->render();
+	_gameOver->render();
 }
 
 // -------------------------------------------------------
