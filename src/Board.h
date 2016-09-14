@@ -1,10 +1,9 @@
 #pragma once
 #include <renderer\render_types.h>
-#include <ui\IMGUI.h>
+#include <imgui\IMGUI.h>
 #include "GameContext.h"
 #include "HexGrid.h"
 #include <vector>
-#include "PostProcessEffect.h"
 
 struct ClickResult {
 
@@ -18,8 +17,14 @@ struct ClickResult {
 
 class Board {
 
+	struct Selection {
+		float timer;
+		ds::Texture texture;
+		int index;
+	};
+
 public:
-	Board();
+	Board(GameContext* context);
 	~Board();
 	int update(float dt);
 	void render();
@@ -34,11 +39,12 @@ private:
 	int _maxBombs;
 	int _killed;
 	HexGrid _grid;
-	int _selected;
+	//int _selected;
 	int _hover;
 	int _width;
 	int _height;
-	FadeOutEffect* _fadeOutEffect;
-	FadeOutEffectSettings _settings;
+	GameContext* _context;
+	Selection _selection;
+	ds::Texture _pieceTexture;
 };
 

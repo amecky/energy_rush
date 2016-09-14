@@ -1,5 +1,5 @@
 #include "MainGameState.h"
-#include <sprites\SpriteBatch.h>
+#include <renderer\sprites.h>
 #include "..\Constants.h"
 #include <Vector.h>
 
@@ -7,10 +7,12 @@ MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), 
 	_maxBombs = 2;
 	_width = 20;
 	_height = 15;
+	_board = new Board(context);
 }
 
 
 MainGameState::~MainGameState() {
+	delete _board;
 }
 
 // -------------------------------------------------------
@@ -23,7 +25,7 @@ void MainGameState::init() {
 // fill bombs
 // -------------------------------------------------------
 void MainGameState::fillBombs() {
-	_context->board->refill();
+	_board->refill();
 }
 
 // -------------------------------------------------------
@@ -31,7 +33,7 @@ void MainGameState::fillBombs() {
 // -------------------------------------------------------
 void MainGameState::activate() {
 	
-	_context->hudDialog->activate();
+	//_context->hudDialog->activate();
 
 	_maxBombs = 2;
 	_context->collected = 0;
@@ -39,9 +41,9 @@ void MainGameState::activate() {
 	_context->level = 0;
 	_context->kills = 0;
 
-	_context->hudDialog->setNumber(HUD_COLLECTED, 0);
-	_context->hudDialog->setNumber(HUD_BOMBS, 0);
-	_context->hudDialog->setNumber(HUD_LEVEL, 0);
+	//_context->hudDialog->setNumber(HUD_COLLECTED, 0);
+	//_context->hudDialog->setNumber(HUD_BOMBS, 0);
+	//_context->hudDialog->setNumber(HUD_LEVEL, 0);
 
 	nextLevel();
 	
@@ -56,9 +58,9 @@ void MainGameState::nextLevel() {
 	_killed = 0;
 	//_context->kills = 0;
 	_maxBombs = _context->level * 2;
-	_context->board->nextLevel(_context->level);
-	_context->hudDialog->setNumber(HUD_LEVEL, _context->level);
-	_context->hudDialog->setNumber(HUD_BOMBS, _maxBombs);
+	_board->nextLevel(_context->level);
+	//_context->hudDialog->setNumber(HUD_LEVEL, _context->level);
+	//_context->hudDialog->setNumber(HUD_BOMBS, _maxBombs);
 	
 	//_grid.decrementBombs();
 }
@@ -66,23 +68,23 @@ void MainGameState::nextLevel() {
 // dactivate
 // -------------------------------------------------------
 void MainGameState::deactivate() {
-	_context->hudDialog->deactivate();
+	//_context->hudDialog->deactivate();
 }
 
 // -------------------------------------------------------
 // on button up
 // -------------------------------------------------------
 int MainGameState::onButtonUp(int button, int x, int y) {
-	ClickResult result = _context->board->onClick(x, y);
+	ClickResult result = _board->onClick(x, y);
 	if (result.killed) {
 		return 1;
 	}
 	_context->collected += result.collected;
-	_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
+	//_context->hudDialog->setNumber(HUD_COLLECTED, _context->collected);
 	_killed += result.bombsRemoved;
 	_context->kills += result.bombsRemoved;
 	int d = _maxBombs - _killed;
-	_context->hudDialog->setNumber(HUD_BOMBS, d);	
+	//_context->hudDialog->setNumber(HUD_BOMBS, d);	
 	if (result.finished) {
 		nextLevel();
 	}	
@@ -93,7 +95,7 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
 
-	_context->board->update(dt);
+	_board->update(dt);
 	return 0;
 }
 
@@ -101,8 +103,8 @@ int MainGameState::update(float dt) {
 // render
 // -------------------------------------------------------
 void MainGameState::render() {
-	ds::sprites::draw(v2(512, 384), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f), 0.0f, 2.0f, 2.0f);
-	_context->board->render();
+	//ds::sprites::draw(v2(512, 384), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f), 0.0f, 2.0f, 2.0f);
+	_board->render();
 }
 
 // -------------------------------------------------------
@@ -113,10 +115,10 @@ int MainGameState::onChar(int ascii) {
 		return 1;
 	}
 	if (ascii == 'r') {
-		_context->board->fadeOut();
+		_context->pick_colors();
 	}
 	if (ascii == 'f') {
-		_context->board->flashBombs();
+		_board->flashBombs();
 	}
 	return 0;
 }

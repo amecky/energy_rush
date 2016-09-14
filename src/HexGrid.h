@@ -1,7 +1,8 @@
 #pragma once
 #include <Vector.h>
-#include <math\hex.h>
+#include <core\math\hex.h>
 #include <vector>
+#include "GameContext.h"
 
 enum ItemState {
 	IS_NORMAL,
@@ -15,18 +16,20 @@ struct GridItem {
 	Hex hex;
 	v2 position;
 	v2 scale;
+	float rotation;
 	int bombCounter;
 	int color;
 	ItemState state;
 	float timer;
 	float counterScale;
 	float counterTimer;
+	float bombTimer;
 };
 
 class HexGrid {
 
 public:
-	HexGrid();
+	HexGrid(GameContext* context);
 	~HexGrid();
 	void resize(int qMax, int rMax);
 	void fill();
@@ -55,6 +58,7 @@ private:
 	int _qMax;
 	int _rMax;
 	GridItem* _items;
+	GameContext* _context;
 	Layout _layout;
 	int _hover;
 };

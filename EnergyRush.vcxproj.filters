@@ -5,13 +5,8 @@
     <ClCompile Include="src\gamestates\MainGameState.cpp">
       <Filter>gamestates</Filter>
     </ClCompile>
-    <ClCompile Include="src\gamestates\GameOverState.cpp">
-      <Filter>gamestates</Filter>
-    </ClCompile>
     <ClCompile Include="src\HexGrid.cpp" />
-    <ClCompile Include="src\gamestates\MainMenuState.cpp">
-      <Filter>gamestates</Filter>
-    </ClCompile>
+    <ClCompile Include="src\Board.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -20,14 +15,10 @@
     <ClInclude Include="src\gamestates\MainGameState.h">
       <Filter>gamestates</Filter>
     </ClInclude>
-    <ClInclude Include="src\gamestates\GameOverState.h">
-      <Filter>gamestates</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameContext.h" />
     <ClInclude Include="src\HexGrid.h" />
-    <ClInclude Include="src\gamestates\MainMenuState.h">
-      <Filter>gamestates</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Board.h" />
+    <ClInclude Include="src\GameSettings.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EnergyRush.manifest" />
@@ -42,17 +33,26 @@
     <None Include="content\dialogs\credits.json">
       <Filter>content\dialogs</Filter>
     </None>
-    <None Include="content\dialogs\game_over.json">
+    <None Include="content\engine_settings.json">
+      <Filter>content</Filter>
+    </None>
+    <None Include="content\dialogs\GameOver.json">
       <Filter>content\dialogs</Filter>
     </None>
-    <None Include="content\dialogs\highscores.json">
+    <None Include="content\dialogs\Highscores.json">
       <Filter>content\dialogs</Filter>
     </None>
-    <None Include="content\dialogs\main_menu.json">
+    <None Include="content\dialogs\HUD.json">
       <Filter>content\dialogs</Filter>
     </None>
-    <None Include="content\resources\hud.json">
-      <Filter>content\resources</Filter>
+    <None Include="content\dialogs\MainMenu.json">
+      <Filter>content\dialogs</Filter>
+    </None>
+    <None Include="content\resources.json">
+      <Filter>content</Filter>
+    </None>
+    <None Include="content\settings.json">
+      <Filter>content</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

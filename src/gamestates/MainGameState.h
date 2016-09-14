@@ -1,11 +1,10 @@
 #pragma once
-#include <base\GameState.h>
+#include <gamestates\GameState.h>
 #include <renderer\render_types.h>
-#include <ui\IMGUI.h>
+#include <imgui\IMGUI.h>
 #include "..\GameContext.h"
 #include "..\HexGrid.h"
 #include <vector>
-#include "..\PostProcessEffect.h"
 #include "..\Board.h"
 
 class MainGameState : public ds::GameState {
@@ -30,6 +29,6 @@ private:
 	int _hover;
 	int _width;
 	int _height;
-
+	Board* _board;
 };
 

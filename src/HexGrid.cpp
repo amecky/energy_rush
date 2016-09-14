@@ -1,11 +1,11 @@
 #include "HexGrid.h"
 #include <assert.h>
 #include <renderer\graphics.h>
-#include <math\tweening.h>
+#include <core\math\tweening.h>
+#include <core\math\math.h>
+#include <base\InputSystem.h>
 
-const float COUNTER_FLASH_TTL = 0.6f;
-
-HexGrid::HexGrid() : _qMax(0), _rMax(0), _items(0), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 130)) , _hover(-1) {
+HexGrid::HexGrid(GameContext* context) : _qMax(0), _rMax(0), _items(0), _layout(layout_pointy, v2(24.0f, 24.0f), v2(100, 130)) , _hover(-1) , _context(context) {
 }
 
 HexGrid::~HexGrid() {
@@ -39,11 +39,13 @@ void HexGrid::fill() {
 			item.hex = Hex(q, r);
 			item.position = hex_math::hex_to_pixel(_layout, item.hex);
 			item.bombCounter = 0;
-			item.color = ds::math::random(0, 4);
+			item.color = math::random(0, 4);
 			item.state = IS_GROW;
 			item.timer = 0.0f;
 			item.counterScale = 1.0f;
-			item.counterTimer = 0.0f;
+			item.bombTimer = 0.0f;
+			item.counterTimer = math::random(_context->settings.bombs.startDelay, _context->settings.bombs.endDelay);
+			item.rotation = 0.0f;
 			int idx = (q + q_offset) + r * _qMax;
 			_items[idx] = item;
 		}
@@ -65,7 +67,7 @@ void HexGrid::fillBombs(int max) {
 		}
 	}
 	for (int i = 0; i < total; ++i) {
-		int idx = ds::math::random(0, total - 1);
+		int idx = math::random(0, total - 1);
 		Hex t = temp[i];
 		temp[i] = temp[idx];
 		temp[idx] = t;
@@ -112,7 +114,7 @@ int HexGrid::neighbors(const Hex& hex, Hex* ret) {
 // convert from mouse pos
 // -------------------------------------------------------
 Hex HexGrid::convertFromMousePos() {
-	v2 mp = ds::renderer::getMousePosition();
+	v2 mp = ds::input::getMousePosition();
 	return hex_math::hex_round(hex_math::pixel_to_hex(_layout, mp));
 }
 // -------------------------------------------------------
@@ -140,7 +142,7 @@ const int HexGrid::size() const {
 // select
 // -------------------------------------------------------
 int HexGrid::select(int x, int y) {
-	v2 mp = ds::renderer::getMousePosition();
+	v2 mp = ds::input::getMousePosition();
 	Hex h = hex_math::hex_round(hex_math::pixel_to_hex(_layout, mp));
 	int q_offset = h.r >> 1;
 	int selected = -1;
@@ -192,7 +194,7 @@ void HexGrid::markAsBomb(const Hex& hex) {
 void HexGrid::pickRandomColor(const Hex& hex) {
 	int q_offset = hex.r >> 1;
 	int idx = (hex.q + q_offset) + hex.r * _qMax;
-	_items[idx].color = ds::math::random(0, 4);
+	_items[idx].color = math::random(0, 4);
 }
 
 // -------------------------------------------------------
@@ -240,7 +242,7 @@ void HexGrid::flashBombs() {
 		GridItem& item = get(i);
 		if (item.bombCounter > 0) {
 			item.counterScale = 1.0f;
-			item.counterTimer = COUNTER_FLASH_TTL;
+			item.counterTimer = _context->settings.bombs.shakeTTL;
 		}
 	}
 }
@@ -255,7 +257,7 @@ void HexGrid::update(float dt) {
 		if (item.state == IS_GROW) {
 			item.timer += dt;
 			float norm = item.timer / 0.4f;
-			item.scale = tweening::interpolate(tweening::easeInQuad, v2(0.1f, 0.1f), v2(1.0f, 1.0f), norm);
+			item.scale = tweening::interpolate(tweening::easeInQuad, v2(0.1f, 0.1f), v2(1.0f, 1.0f), item.timer,0.4f);
 			if (norm >= 1.0f) {
 				item.state = IS_NORMAL;
 				item.scale = v2(1, 1);
@@ -264,11 +266,11 @@ void HexGrid::update(float dt) {
 		else if (item.state == IS_SHRINK) {
 			item.timer += dt;
 			float norm = item.timer / 0.4f;
-			item.scale = tweening::interpolate(tweening::easeInQuad, v2(1.0f, 1.0f), v2(0.05f, 0.05f), norm);
+			item.scale = tweening::interpolate(tweening::easeInQuad, v2(1.0f, 1.0f), v2(0.05f, 0.05f), item.timer,0.4f);
 			if (norm >= 1.0f) {
 				item.state = IS_GROW;
 				item.timer = 0.0f;
-				item.color = ds::math::random(0, 4);
+				item.color = math::random(0, 4);
 			}
 		}
 		if (item.state == IS_WIGGLE) {
@@ -283,12 +285,17 @@ void HexGrid::update(float dt) {
 		}
 		if (item.bombCounter > 0 && item.counterTimer > 0.0f) {
 			item.counterTimer -= dt;
-			float norm = item.counterTimer / COUNTER_FLASH_TTL;
-			item.counterScale = 1.0f + abs(sin(norm * TWO_PI) * 0.4f);
 			if (item.counterTimer <= 0.0f) {
-				item.counterTimer = 0.0f;
+				item.bombTimer = _context->settings.bombs.shakeTTL;
+				item.counterTimer = math::random(_context->settings.bombs.startDelay, _context->settings.bombs.endDelay);
 				item.counterScale = 1.0f;
 			}
+		}
+		if (item.bombCounter > 0 && item.bombTimer > 0.0f) {
+			item.bombTimer -= dt;
+			float norm = 1.0f - item.bombTimer / _context->settings.bombs.shakeTTL;
+			item.rotation = sin(norm * _context->settings.bombs.frequency * TWO_PI) * sin(norm * PI) * DEGTORAD(_context->settings.bombs.angle);
+			item.counterScale = _context->settings.bombs.minScale + sin(norm * PI) * _context->settings.bombs.scaleVariance;
 		}
 	}
 

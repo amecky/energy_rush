@@ -1,20 +1,20 @@
 #include "Board.h"
-#include <sprites\SpriteBatch.h>
+#include <renderer\sprites.h>
 #include "Constants.h"
 #include <Vector.h>
 
-Board::Board() {
-	_selected = -1;
+Board::Board(GameContext* context) : _context(context) , _grid(context) {
+	_selection.texture = math::buildTexture(ds::Rect(0, 50, 44, 50));
+	_selection.index = -1;
+	_selection.timer = 0.0f;
 	_maxBombs = 2;
 	_grid.resize(20, 15);
 	_grid.setOrigin(v2(100, 100));
-	_settings.fadeTTL = 4.0f;
-	_fadeOutEffect = new FadeOutEffect(&_settings);
+	_pieceTexture = math::buildTexture(ds::Rect(0, 0, 40, 46));
 }
 
 
 Board::~Board() {
-	delete _fadeOutEffect;
 }
 
 // -------------------------------------------------------
@@ -32,8 +32,7 @@ void Board::activate() {
 	_maxBombs = 2;
 	_width = 20;
 	_height = 15;
-	_selected = -1;
-	_fadeOutEffect->deactivate();
+	_selection.index = -1;
 }
 
 // -------------------------------------------------------
@@ -45,7 +44,6 @@ void Board::nextLevel(int level) {
 	_maxBombs = level * 2;
 	refill();	
 	_grid.decrementBombs();
-	_fadeOutEffect->deactivate();
 }
 // -------------------------------------------------------
 // dactivate
@@ -54,7 +52,6 @@ void Board::deactivate() {
 }
 
 void Board::fadeOut() {
-	_fadeOutEffect->activate();
 }
 
 // -------------------------------------------------------
@@ -67,24 +64,24 @@ ClickResult Board::onClick(int x, int y) {
 		const GridItem& item = _grid.get(h);
 		if (item.bombCounter == 0) {
 			int r = _grid.select(x, y);
-			if (_selected != r) {
-				if (_selected == -1) {
-					_selected = r;
+			if (_selection.index != r) {
+				if (_selection.index == -1) {
+					_selection.index = r;
 				}
 				else {
 					bool dec = true;
 					// swap elements
-					_grid.swap(_selected, r);
+					_grid.swap(_selection.index, r);
 					std::vector<Hex> list;
 					_grid.findConnectedItems(h, list);
 					int firstSize = list.size();
-					GridItem& selItem = _grid.get(_selected);
+					GridItem& selItem = _grid.get(_selection.index);
 					_grid.findConnectedItems(selItem.hex, list);
 					int secondSize = list.size() - firstSize;
 					// check if both will remove more than 2
 					if (firstSize >= 3 && secondSize >= 3) {
 						// reset selection
-						_selected = -1;
+						_selection.index = -1;
 						// refill items
 						int itemsKilled = _grid.refill(list);
 						_killed += itemsKilled;
@@ -101,7 +98,7 @@ ClickResult Board::onClick(int x, int y) {
 					}
 					else {
 						// swap back - no legal move
-						_grid.swap(r, _selected);
+						_grid.swap(r, _selection.index);
 					}
 					if (dec) {
 						_grid.flashBombs();
@@ -112,7 +109,7 @@ ClickResult Board::onClick(int x, int y) {
 				}
 			}
 			else {
-				_selected = -1;
+				_selection.index = -1;
 			}
 		}
 	}
@@ -123,7 +120,9 @@ ClickResult Board::onClick(int x, int y) {
 // -------------------------------------------------------
 int Board::update(float dt) {
 	_grid.update(dt);
-	_fadeOutEffect->update(dt);
+	if (_selection.index != -1) {
+		_selection.timer += dt;
+	}
 	return 0;
 }
 
@@ -139,20 +138,22 @@ void Board::render() {
 	//ds::sprites::draw(v2(256, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 	//ds::sprites::draw(v2(768, 576), ds::math::buildTexture(0.0f, 512.0f, 512.0f, 384.0f));
 
-	_fadeOutEffect->begin();
-
+	//_fadeOutEffect->begin();
+	ds::SpriteBuffer* sprites = graphics::getSpriteBuffer();
 	for (int i = 0; i < _grid.size(); ++i) {
 		const GridItem& item = _grid.get(i);
 		int offset = item.color * 40;
-		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, offset, 40, 44)), 0.0f, item.scale.x, item.scale.y);
+		sprites->draw(item.position, _pieceTexture, 0.0f, item.scale, _context->colors[item.color]);
+		// draw number
 		if (item.bombCounter > 0 && (item.state == IS_NORMAL || item.state == IS_WIGGLE)) {
 			offset = 200 + (item.bombCounter - 1) * 30;
-			ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(0, offset, 30, 18)), 0.0f, item.counterScale, item.counterScale, ds::Color(192, 192, 192, 255));
+			sprites->draw(item.position, math::buildTexture(ds::Rect(20, offset, 30, 22)), item.rotation, v2(item.counterScale, item.counterScale));// , ds::Color(192, 192, 192, 255));
 		}
 	}
-	if (_selected != -1) {
-		const GridItem& item = _grid.get(_selected);
-		ds::sprites::draw(item.position, ds::math::buildTexture(ds::Rect(50, 210, 56, 60)));
+	if (_selection.index != -1) {
+		const GridItem& item = _grid.get(_selection.index);
+		float s = 1.0f + sin(_selection.timer * 10.0f) * 0.05f;
+		sprites->draw(item.position, _selection.texture,0.0f,v2(s,s));
 	}
-	_fadeOutEffect->end();
+	//_fadeOutEffect->end();
 }

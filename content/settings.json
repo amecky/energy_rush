@@ -1,0 +1,11 @@
+bombs {
+	start_delay : 2.0
+	end_delay : 4.0
+	amplitude : 2.0
+	frequency : 3.0
+	angle : 30
+	min_scale : 1.0
+	scale_variance : 0.3
+	scale_frequency : 1.0
+	shake_ttl : 0.8
+}
