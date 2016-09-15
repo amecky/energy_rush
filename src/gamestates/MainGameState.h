@@ -9,6 +9,11 @@
 
 class MainGameState : public ds::GameState {
 
+	enum GameMode {
+		GM_RUNNING,
+		GM_OVER
+	};
+
 public:
 	MainGameState(GameContext* context);
 	virtual ~MainGameState();
@@ -22,7 +27,7 @@ public:
 private:
 	void fillBombs();
 	void nextLevel();
-
+	void stopGame();
 	int _maxBombs;
 	int _killed;
 	GameContext* _context;
@@ -32,5 +37,6 @@ private:
 	int _width;
 	int _height;
 	Board* _board;
+	GameMode _mode;
 };
 

@@ -32,10 +32,12 @@ void EnergyRush::prepare(ds::Settings* settings) {
 bool EnergyRush::loadContent() {	
 	_context = new GameContext;
 	_context->settings.load();
-	//_context->hudDialog = gui->get("HUD");
-	//_context->board = new Board;
+	_context->highscores.load("scores.scr");
 	addGameState(new MainGameState(_context));
-
+	addGameState(new ds::BasicMenuGameState("MainMenu", "MainMenu"));
+	connectGameStates("MainGame", 1, "MainGame");
+	connectGameStates("MainGame", 2, "MainMenu");
+	connectGameStates("MainMenu", 1, "MainGame");
 	RID material = ds::res::find("SpriteMaterial", ds::ResourceType::MATERIAL);
 	ds::Material* m = ds::res::getMaterial(material);
 	m->texture = ds::res::find("TextureArray", ds::ResourceType::TEXTURE);
@@ -47,7 +49,7 @@ bool EnergyRush::loadContent() {
 void EnergyRush::init() {
 	// for testing
 	_context->reset();
-	activate("MainGame");
+	activate("MainMenu");
 }
 
 
@@ -62,4 +64,12 @@ void EnergyRush::update(float dt) {
 // -------------------------------------------------------
 void EnergyRush::render() {
 	
+}
+
+// -------------------------------------------------------
+// onShutdown
+// -------------------------------------------------------
+void EnergyRush::onShutdown() {
+	LOG << "saving scores";
+	_context->highscores.save("scores.scr");
 }

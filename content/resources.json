@@ -30,3 +30,8 @@ dialog {
     file : "GameOver"
     font : "nullshock"
 }
+dialog {
+    name : "MainMenu"
+    file : "MainMenu"
+    font : "nullshock"
+}

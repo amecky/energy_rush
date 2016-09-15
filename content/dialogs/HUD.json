@@ -16,16 +16,16 @@ text {
 }
 numbers { 
     id : 3
-    pos : 120,710
+    pos : 120,705
     color : 230,180,0,255
     centered : false
     scale : 1,1
     value : 0
-    length : 3
+    length : 5
 }
 numbers { 
     id : 4
-    pos : 510,710
+    pos : 510,705
     color : 230,180,0,255
     centered : false
     scale : 1,1
@@ -34,7 +34,7 @@ numbers {
 }
 numbers { 
     id : 5
-    pos : 900,710
+    pos : 900,705
     color : 230,180,0,255
     centered : false
     scale : 1,1

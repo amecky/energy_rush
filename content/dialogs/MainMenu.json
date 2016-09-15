@@ -1,35 +1,38 @@
 image { 
-    id : 0 
-    pos : 256,192 
+    id : 10 
+    pos : 256,700 
     color : 255,255,255,255 
     centered : true 
-    scale : 1.00 
-    rect : 0,0,50,50     
+    scale : 1,1
+    rect : 540,0,500,62    
 }
 button { 
-    id : 1 
+    id : 666 
     pos : 400,200 
     color : 255,255,255,255 
+    image_color : 192,0,0,255
     centered : true 
-    scale : 1.00 
-    rect : 300,0,340,60 
+    scale : 1,1
+    rect : 214,0,340,62
     text : "Exit"    
 }
 button { 
-    id : 3 
+    id : 1 
     pos : 256,500 
     color : 255,255,255,255 
+    image_color : 0,192,0,255
     centered : true 
-    scale : 1.00 
-    rect : 370,0,340,60 
+    scale : 1,1
+    rect : 214,0,340,62
     text : "Play"    
 }
 button { 
-    id : 4 
+    id : 2 
     pos : 400,350 
     color : 255,255,255,255 
+    image_color : 0,0,192,255
     centered : true 
-    scale : 1.00 
-    rect : 370,0,340,60 
+    scale : 1,1
+    rect : 214,0,340,62
     text : "Highscores"
 }

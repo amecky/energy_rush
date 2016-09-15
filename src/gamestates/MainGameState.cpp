@@ -10,6 +10,7 @@ MainGameState::MainGameState(GameContext* context) : ds::GameState("MainGame"), 
 	_board = new Board(context);
 	_hud = ds::res::getGUIDialog("HUD");
 	_gameOver = ds::res::getGUIDialog("GameOver");
+	_mode = GM_RUNNING;
 }
 
 
@@ -42,13 +43,13 @@ void MainGameState::activate() {
 	_context->points = 0;
 	_context->level = 0;
 	_context->kills = 0;
-
+	_board->refill();
 	_hud->setNumber(HUD_COLLECTED, 0);
 	_hud->setNumber(HUD_BOMBS, 0);
 	_hud->setNumber(HUD_LEVEL, 0);
 
-	_gameOver->activate();
-
+	_gameOver->deactivate();
+	_mode = GM_RUNNING;
 	nextLevel();
 	
 }
@@ -79,28 +80,38 @@ void MainGameState::deactivate() {
 // on button up
 // -------------------------------------------------------
 int MainGameState::onButtonUp(int button, int x, int y) {
-	ClickResult result = _board->onClick(x, y);
-	if (result.killed) {
-		return 1;
+	if (_mode == GM_OVER) {
+		// FIXME: include some delay if someone has clicked accidentially
+		int ret = _gameOver->onButton(button, x, y, true);
+		if (ret != -1) {
+			return ret;
+		}
 	}
-	_context->collected += result.collected;
-	_hud->setNumber(HUD_COLLECTED, _context->collected);
-	_killed += result.bombsRemoved;
-	_context->kills += result.bombsRemoved;
-	int d = _maxBombs - _killed;
-	_hud->setNumber(HUD_BOMBS, d);
-	if (result.finished) {
-		nextLevel();
-	}	
+	else {
+		ClickResult result = _board->onClick(x, y);
+		if (result.killed) {
+			return 1;
+		}
+		_context->collected += result.collected;
+		_hud->setNumber(HUD_COLLECTED, _context->collected);
+		_killed += result.bombsRemoved;
+		_context->kills += result.bombsRemoved;
+		int d = _maxBombs - _killed;
+		_hud->setNumber(HUD_BOMBS, d);
+		if (result.finished) {
+			nextLevel();
+		}
+	}
 	return 0;
 }
 // -------------------------------------------------------
 // Update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
-
-	_board->update(dt);
-	_hud->tick(dt);
+	if (_mode == GM_RUNNING) {
+		_board->update(dt);
+		_hud->tick(dt);
+	}
 	return 0;
 }
 
@@ -114,12 +125,18 @@ void MainGameState::render() {
 	_gameOver->render();
 }
 
+void MainGameState::stopGame() {
+	_gameOver->activate();
+	_hud->deactivate();
+	_mode = GM_OVER;
+}
+
 // -------------------------------------------------------
 // on char
 // -------------------------------------------------------
 int MainGameState::onChar(int ascii) {	
 	if (ascii == 'e') {
-		return 1;
+		stopGame();
 	}
 	if (ascii == 'r') {
 		_context->pick_colors();

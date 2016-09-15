@@ -3,6 +3,30 @@
 #include <core\data\DynamicSettings.h>
 #include "Constants.h"
 #include "GameSettings.h"
+#include <core\data\HighscoreService.h>
+
+struct Highscore {
+
+	int collected;
+	int level;
+	int points;
+	char name[16];
+
+	Highscore() : collected(0) , level(1) , points(0) {}
+
+	Highscore(int c, int l, int p) : collected(c), level(l), points(p) {}
+
+	int compare(const Highscore& other) const {
+		if (points < other.points) {
+			return -1;
+		}
+		if (points > other.points ) {
+			return 1;
+		}
+		return 0;
+	}
+
+};
 
 struct GameContext {
 
@@ -10,9 +34,9 @@ struct GameContext {
 	int points;
 	int level;
 	int kills;
-	//ds::GUIDialog* hudDialog;
 	GameSettings settings;
 	ds::Color colors[8];
+	ds::HighscoreService<Highscore, 10> highscores;
 
 	void reset() {
 		collected = 0;
