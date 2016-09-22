@@ -3,6 +3,7 @@
 #include <core\math\hex.h>
 #include <vector>
 #include "GameContext.h"
+#include <core\script\vm.h>
 
 enum ItemState {
 	IS_NORMAL,
@@ -61,4 +62,5 @@ private:
 	GameContext* _context;
 	Layout _layout;
 	int _hover;
+	ds::vm::Script* _bombScript;
 };

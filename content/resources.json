@@ -35,3 +35,8 @@ dialog {
     file : "MainMenu"
     font : "nullshock"
 }
+script {
+	name : "Bomb"
+	file : "bomb"
+	variables : "TIMER"
+}
