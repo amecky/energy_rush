@@ -256,13 +256,22 @@ void HexGrid::update(float dt) {
 	// scaling based on item state
 	const ds::vm::Method& m = _bombScript->getMethod(SID("shake"));
 	const ds::vm::Method& wm = _bombScript->getMethod(SID("wiggle"));
+	const ds::vm::Method& gm = _bombScript->getMethod(SID("grow"));
 	for (int i = 0; i < size(); ++i) {
 		GridItem& item = get(i);
 		if (item.state == IS_GROW) {
 			item.timer += dt;
+			/*
 			float norm = item.timer / 0.4f;
 			item.scale = tweening::interpolate(tweening::easeInQuad, v2(0.1f, 0.1f), v2(1.0f, 1.0f), item.timer,0.4f);
 			if (norm >= 1.0f) {
+				item.state = IS_NORMAL;
+				item.scale = v2(1, 1);
+			}
+			*/
+			_bombScript->set(0, v4(item.timer));
+			item.scale = _bombScript->execute(gm).xy();
+			if (_bombScript->getRegister(1).x >= 1.0f) {
 				item.state = IS_NORMAL;
 				item.scale = v2(1, 1);
 			}
@@ -280,11 +289,7 @@ void HexGrid::update(float dt) {
 		if (item.state == IS_WIGGLE) {
 			item.timer += dt;
 			_bombScript->set(0, v4(item.timer));
-			_bombScript->execute(wm);
-			item.scale = _bombScript->getRegister(4).xy();
-			//float norm = item.timer / 0.4f;
-			//item.scale.x = 0.8f + sin(item.timer * 5.0f) * 0.2f;
-			//item.scale.y = 0.8f + sin(item.timer * 5.0f) * 0.2f;
+			item.scale = _bombScript->execute(wm).xy();
 			if (_bombScript->getRegister(1).x >= 1.0f) {
 				item.state = IS_NORMAL;
 				item.scale = v2(1, 1);
