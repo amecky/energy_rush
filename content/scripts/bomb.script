@@ -1,15 +1,23 @@
 function shake() {
     // float norm = 1.0f - item.bombTimer / _context->settings.bombs.shakeTTL;
     R1 = TIMER / 0.4;
+    R1 = SAT(R1);
     R2 = 1.0 - R1;
     // item.rotation = sin(norm * _context->settings.bombs.frequency * TWO_PI) * sin(norm * PI) * DEGTORAD(_context->settings.bombs.angle);
     R3 = 2.0 * TWO_PI;
     R3 = R3 * R2;
     R4 = R2 * PI;
     R4 = SIN(R4);
-    R4 = R4 * D2R(45.0);
+    R4 = R4 * D2R(30.0);
     R5 = R4 * SIN(R3);
     // // item.counterScale = _context->settings.bombs.minScale + sin(norm * PI) * _context->settings.bombs.scaleVariance;
-    R3 = R4 * 0.2;    
-    R3 = 1.2 + R3;						
+    R3 = R4 * 0.5;    
+    R3 = 1.0 + R3;						
+}
+function wiggle() {
+    R1 = TIMER / 0.4;
+    R1 = SAT(R1);
+    R2 = R1 * 5.0;
+    R3 = SIN(R2) * 0.2;
+    R4 = 0.8 + R3;						
 }

@@ -255,6 +255,7 @@ void HexGrid::flashBombs() {
 void HexGrid::update(float dt) {
 	// scaling based on item state
 	const ds::vm::Method& m = _bombScript->getMethod(SID("shake"));
+	const ds::vm::Method& wm = _bombScript->getMethod(SID("wiggle"));
 	for (int i = 0; i < size(); ++i) {
 		GridItem& item = get(i);
 		if (item.state == IS_GROW) {
@@ -278,10 +279,13 @@ void HexGrid::update(float dt) {
 		}
 		if (item.state == IS_WIGGLE) {
 			item.timer += dt;
-			float norm = item.timer / 0.4f;
-			item.scale.x = 0.8f + sin(item.timer * 5.0f) * 0.2f;
-			item.scale.y = 0.8f + sin(item.timer * 5.0f) * 0.2f;
-			if (norm >= 1.0f) {
+			_bombScript->set(0, v4(item.timer));
+			_bombScript->execute(wm);
+			item.scale = _bombScript->getRegister(4).xy();
+			//float norm = item.timer / 0.4f;
+			//item.scale.x = 0.8f + sin(item.timer * 5.0f) * 0.2f;
+			//item.scale.y = 0.8f + sin(item.timer * 5.0f) * 0.2f;
+			if (_bombScript->getRegister(1).x >= 1.0f) {
 				item.state = IS_NORMAL;
 				item.scale = v2(1, 1);
 			}
@@ -298,9 +302,6 @@ void HexGrid::update(float dt) {
 			item.bombTimer -= dt;
 			_bombScript->set(0, v4(item.bombTimer));
 			_bombScript->execute(m);
-			//float norm = 1.0f - item.bombTimer / _context->settings.bombs.shakeTTL;
-			//item.rotation = sin(norm * _context->settings.bombs.frequency * TWO_PI) * sin(norm * PI) * DEGTORAD(_context->settings.bombs.angle);
-			//item.counterScale = _context->settings.bombs.minScale + sin(norm * PI) * _context->settings.bombs.scaleVariance;
 			item.rotation = _bombScript->getRegister(5).x;
 			item.counterScale = _bombScript->getRegister(3).x;
 		}
