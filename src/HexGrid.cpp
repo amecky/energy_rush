@@ -257,18 +257,12 @@ void HexGrid::update(float dt) {
 	const ds::vm::Method& m = _bombScript->getMethod(SID("shake"));
 	const ds::vm::Method& wm = _bombScript->getMethod(SID("wiggle"));
 	const ds::vm::Method& gm = _bombScript->getMethod(SID("grow"));
+	const ds::vm::Method& sm = _bombScript->getMethod(SID("shrink"));
+	const ds::vm::Method& wd = _bombScript->getMethod(SID("wiggledelay"));
 	for (int i = 0; i < size(); ++i) {
 		GridItem& item = get(i);
 		if (item.state == IS_GROW) {
 			item.timer += dt;
-			/*
-			float norm = item.timer / 0.4f;
-			item.scale = tweening::interpolate(tweening::easeInQuad, v2(0.1f, 0.1f), v2(1.0f, 1.0f), item.timer,0.4f);
-			if (norm >= 1.0f) {
-				item.state = IS_NORMAL;
-				item.scale = v2(1, 1);
-			}
-			*/
 			_bombScript->set(0, v4(item.timer));
 			item.scale = _bombScript->execute(gm).xy();
 			if (_bombScript->getRegister(1).x >= 1.0f) {
@@ -278,9 +272,9 @@ void HexGrid::update(float dt) {
 		}
 		else if (item.state == IS_SHRINK) {
 			item.timer += dt;
-			float norm = item.timer / 0.4f;
-			item.scale = tweening::interpolate(tweening::easeInQuad, v2(1.0f, 1.0f), v2(0.05f, 0.05f), item.timer,0.4f);
-			if (norm >= 1.0f) {
+			_bombScript->set(0, v4(item.timer));
+			item.scale = _bombScript->execute(sm).xy();
+			if (_bombScript->getRegister(1).x >= 1.0f) {
 				item.state = IS_GROW;
 				item.timer = 0.0f;
 				item.color = math::random(0, 4);
@@ -298,8 +292,9 @@ void HexGrid::update(float dt) {
 		if (item.bombCounter > 0 && item.counterTimer > 0.0f) {
 			item.counterTimer -= dt;
 			if (item.counterTimer <= 0.0f) {
-				item.bombTimer = _context->settings.bombs.shakeTTL;
-				item.counterTimer = math::random(_context->settings.bombs.startDelay, _context->settings.bombs.endDelay);
+				item.counterTimer = _bombScript->execute(wd).x;
+				item.bombTimer = _bombScript->getRegister(1).x;// ->settings.bombs.shakeTTL;
+				//item.counterTimer = math::random(_context->settings.bombs.startDelay, _context->settings.bombs.endDelay);
 				item.counterScale = 1.0f;
 			}
 		}
