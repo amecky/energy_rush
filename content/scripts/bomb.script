@@ -26,8 +26,4 @@ function grow() {
 function shrink() {
     R1 = TIMER / 0.3;
     OUT = TWN(2.0,1.0,0.1,TIMER,0.3);
-}     
-function wiggledelay() {
-    R1 = 0.8;
-    OUT = RND(2.0,10.0);
-}   
+}
